@@ -30,7 +30,21 @@ router.post('/signup', async (req, res)=>{
         res.status(422).send({ error: "Registration Not Successful" });
 		console.log(error);
     }
+})
+
+router.post('/signin', async(req, res)=>{
+    const {email, password} = req.body;
+    if(!email || !password){
+        return res.status(422).json({ error: 'Invalid1' });
+    }
     
+    try {
+        const token = await User.matchPassowrdAndGenerateToken(email, password);
+        return res.cookie('token', token).redirect('/');
+    } catch (error) {
+        return res.status(422).json({ error: 'Invalid' });
+    }
+
 })
 
 
