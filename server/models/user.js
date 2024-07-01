@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
     },
     profileImageURL:{
         type: String,
-        default: '/images/profile.png'
+        default: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
     },
 })
 
@@ -45,6 +45,7 @@ userSchema.static('matchPassowrdAndGenerateToken', async function(email, passwor
     if(!isMatch) {
         throw new console.error("Invalid");
     }
+    
     const token = createToken(user);
     return token;
 })
