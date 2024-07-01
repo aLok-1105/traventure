@@ -14,12 +14,16 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux'; 
+import { signoutSuccess } from '../redux/user/userSlice';
+import axios from 'axios';
 
 
 const pages = ['Blogs', 'About', 'Contact'];
 const pages1 = ['Signin', 'Signup'];
 
 function Navbar() {
+  const dispatch = useDispatch();
   const {currentUser} = useSelector((state)=>state.user)
   // console.log(currentUser);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -38,6 +42,15 @@ function Navbar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleSignout= async() =>{
+    try {
+      await axios.post('http://localhost:8000/user/signout', {}, {withCredentials: true });
+      dispatch(signoutSuccess())
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -158,11 +171,9 @@ function Navbar() {
                     <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
               </Link>
-              <Link to='/dashboard/?tab=profile' style={{ textDecoration: "none", color: "black" }}>
-                <MenuItem>
+                <MenuItem onClick={handleSignout}>
                     <Typography textAlign="center">Signout</Typography>
                 </MenuItem>
-              </Link>
             </Menu>
             </Box>
             </>

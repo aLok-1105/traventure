@@ -40,10 +40,6 @@ export default function DashProfile() {
     }
     
     const defaultTheme = createTheme();
-    console.log(currentUser);
-    // if (currentUser) {
-    //     return <div>Loading...</div>; 
-    // }
 
 
     return (
