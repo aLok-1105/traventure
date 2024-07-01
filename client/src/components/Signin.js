@@ -35,8 +35,8 @@ export default function Signin() {
       try {
           dispatch(signInStart());
           const res = await axios.post('http://localhost:8000/user/signin', {email, password }, {withCredentials: true });
-          console.log(res);
-          dispatch(signInSuccess(res));
+          console.log(res.data);
+          dispatch(signInSuccess(res.data));
           navigate('/')
         } catch (error) {
           console.log("error", error.message);

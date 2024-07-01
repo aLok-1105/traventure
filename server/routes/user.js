@@ -1,6 +1,6 @@
 const {Router} = require('express');
 const User = require('../models/user');
-const { validateToken } = require('../services/authentication');
+const { validateToken, validateToken1 } = require('../services/authentication');
 
 const router = Router();
 
@@ -35,6 +35,7 @@ router.post('/signup', async (req, res)=>{
 
 router.post('/signin', async(req, res)=>{
     const {email, password} = req.body;
+    
     if(!email || !password){
         return res.status(422).json({ error: 'Invalid1' });
     }
@@ -45,35 +46,60 @@ router.post('/signin', async(req, res)=>{
         res.cookie('token', token, {
             httpOnly: true,
             secure: true,
-            maxAge: 3600000,
           });
           const { password: pass, ...rest } = validUser._doc;
-        res.status(201).json(rest);
+        //   console.log(rest);
+            res.status(201).json(rest);
     } catch (error) {
         return res.status(422).json({ error: 'Invalid' });
     }
 
 })
 
-router.get('/check-auth', (req, res) =>{
-    const token = req.cookies.token;
+// router.get('/check-auth', (req, res) =>{
+//     const token = req.cookies.token;
 
-    if (!token) {
-        return res.status(200).json({ isAuthenticated: false });
-    }
+//     if (!token) {
+//         return res.status(200).json({ isAuthenticated: false });
+//     }
 
-    try {
-        const userPayload = validateToken(token);
-        return res.status(200).json({ isAuthenticated: true });
-    } catch (error) {
-        return res.status(200).json({ isAuthenticated: false });
-    }
-})
+//     try {
+//         const userPayload = validateToken(token);
+//         return res.status(200).json({ isAuthenticated: true });
+//     } catch (error) {
+//         return res.status(200).json({ isAuthenticated: false });
+//     }
+// })
 
 router.post('/signout', (req, res) =>{
     res.clearCookie(token);
     res.status(200).json({ message: 'Signout successful' });
 })
+
+router.put('/update/:id', validateToken1, async (req, res, next) => {
+    if (req.user._id !== req.params.id) {
+      return next('You are not allowed to update this user');
+    }
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        
+        {
+          $set: {
+            fullName: req.body.fullName,
+            email: req.body.email,
+            profileImageURL: req.body.profileImageURL,
+            password: req.body.password,
+          },
+        },
+        { new: true }
+      );
+      const { password, ...rest } = updatedUser._doc;
+      res.status(200).json(rest);
+    } catch (error) {
+      next(error);
+    }
+  });
 
 
 module.exports = router

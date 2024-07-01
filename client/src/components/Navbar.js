@@ -12,13 +12,12 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 
 const pages = ['Blogs', 'About', 'Contact'];
 const pages1 = ['Signin', 'Signup'];
-const settings = ['Profile', 'Dashboard', 'Logout'];
 
 function Navbar() {
   const {currentUser} = useSelector((state)=>state.user)
@@ -136,9 +135,7 @@ function Navbar() {
             <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                
                   <Avatar alt="Remy Sharp" src={currentUser.profileImageURL} />
-                  
               </IconButton>
             </Tooltip>
             <Menu
@@ -156,11 +153,16 @@ function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              <Link to='/dashboard/?tab=profile' style={{ textDecoration: "none", color: "black" }}>
+                <MenuItem>
+                    <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
-              ))}
+              </Link>
+              <Link to='/dashboard/?tab=profile' style={{ textDecoration: "none", color: "black" }}>
+                <MenuItem>
+                    <Typography textAlign="center">Signout</Typography>
+                </MenuItem>
+              </Link>
             </Menu>
             </Box>
             </>

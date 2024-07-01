@@ -3,6 +3,8 @@ import Navbar from './components/Navbar';
 import Signin from './components/Signin';
 import {Routes, Route} from 'react-router-dom';
 import Signup from './components/Signup';
+import Dashboard from './components/Dashboard';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   return (
@@ -23,6 +25,9 @@ function App() {
         <Route path='/signin' element={
           <Signin/>
         }>
+        </Route>
+        <Route element={<PrivateRoute/>}>
+          <Route path='/dashboard' element={<Dashboard/>}></Route>
         </Route>
 
         <Route path='*' element={

@@ -20,7 +20,26 @@ function validateToken(token){
     return payload;
 }
 
+
+function validateToken1(req, res, next) {
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.status(401).json({ message: 'No token provided' });
+    }
+    jwt.verify(token, secret, (err, user) => {
+        if (err) {
+            console.log("error", err);
+          return next();
+        }
+        req.user = user;
+        next();
+    });
+    
+}
+
 module.exports = {
     createToken,
-    validateToken
+    validateToken,
+    validateToken1
 }

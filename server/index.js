@@ -9,14 +9,14 @@ const { checkForAuthenticationAndCookie } = require('./middlewares/authenticatio
 const app = express();
 app.use(express.urlencoded({extended: false}));
 app.use(express.json())
+app.use(cookieParser());
+app.use(checkForAuthenticationAndCookie('token'));
 
 dotenv.config({ path: './config.env' });
 app.use(cors({
     origin: 'http://localhost:3000',  // Replace with your frontend URL
     credentials: true,  // Allows cookies to be sent from frontend to backend
   }));
-app.use(cookieParser());
-app.use(checkForAuthenticationAndCookie('token'));
 
 moongoose.connect(process.env.MONGO_URL, {
 }).then(()=>{
