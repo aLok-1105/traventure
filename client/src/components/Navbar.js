@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux'; 
 import { signoutSuccess } from '../redux/user/userSlice';
 import axios from 'axios';
@@ -24,6 +24,7 @@ const pages1 = ['Signin', 'Signup'];
 
 function Navbar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {currentUser} = useSelector((state)=>state.user)
   // console.log(currentUser);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -48,6 +49,8 @@ function Navbar() {
     try {
       await axios.post('http://localhost:8000/user/signout', {}, {withCredentials: true });
       dispatch(signoutSuccess())
+      navigate('/')
+
     } catch (error) {
       console.log(error.message);
     }

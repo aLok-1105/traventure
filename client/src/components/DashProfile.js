@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice';
 import { Alert, CircularProgress } from '@mui/material';
 import { ClassNames } from '@emotion/react';
+import { Link } from 'react-router-dom';
 
 export default function DashProfile() {
 
@@ -22,7 +23,7 @@ export default function DashProfile() {
         setFormData({ ...formData, [e.target.id]: e.target.value });
     };
     const { currentUser, loading, error } = useSelector((state) => state.user);
-    console.log(currentUser);
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (Object.keys(formData).length === 0) {
@@ -104,15 +105,30 @@ export default function DashProfile() {
                                     />
                                 </Grid>
                             </Grid>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                disabled={loading}
-                                sx={{ mt: 3, mb: 2 }}
-                            >
-                                {loading ? <CircularProgress size={24} className={ClassNames.buttonProgress} /> : 'Update'}
-                            </Button>
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        disabled={loading}
+                                        sx={{ mt: 3, mb: 2 }}
+                                    >
+                                        {loading ? <CircularProgress size={24} className={ClassNames.buttonProgress} /> : 'Update'}
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Link to = '/create-post'>
+                                        <Button
+                                            fullWidth
+                                            variant="contained"
+                                            sx={{ mt: 3, mb: 2 }}
+                                        >
+                                        Create Post
+                                        </Button>
+                                    </Link>
+                                </Grid>
+                            </Grid>
                         </Box>
                     </Box>
                     {error && (

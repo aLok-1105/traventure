@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const moongoose = require('mongoose');
 const userRoute = require('./routes/user')
+const postRoute = require('./routes/post')
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
 const { checkForAuthenticationAndCookie } = require('./middlewares/authentication');
@@ -33,6 +34,7 @@ app.get('/', (req, res)=>{
 })
 
 app.use('/user', userRoute)
+app.use('/post', postRoute)
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`Server running on port ${port}`));

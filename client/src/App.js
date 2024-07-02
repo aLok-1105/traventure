@@ -5,6 +5,7 @@ import {Routes, Route} from 'react-router-dom';
 import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
+import CreatePost from './pages/CreatePost';
 
 function App() {
   return (
@@ -29,7 +30,10 @@ function App() {
         <Route element={<PrivateRoute/>}>
           <Route path='/dashboard' element={<Dashboard/>}></Route>
         </Route>
-
+        <Route path='/create-post' element={
+          <CreatePost/>
+        }>
+        </Route>
         <Route path='*' element={
           <>This is 404 page</>
         }>
