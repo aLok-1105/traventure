@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux'; 
+import { useDispatch } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
 import axios from 'axios';
 
@@ -25,7 +25,7 @@ const pages1 = ['Signin', 'Signup'];
 function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {currentUser} = useSelector((state)=>state.user)
+  const { currentUser } = useSelector((state) => state.user)
   // console.log(currentUser);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -45,9 +45,9 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
-  const handleSignout= async() =>{
+  const handleSignout = async () => {
     try {
-      await axios.post('http://localhost:8000/user/signout', {}, {withCredentials: true });
+      await axios.post('http://localhost:8000/user/signout', {}, { withCredentials: true });
       dispatch(signoutSuccess())
       navigate('/')
 
@@ -65,7 +65,7 @@ function Navbar() {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -113,6 +113,18 @@ function Navbar() {
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
+              {
+                !currentUser &&
+                <div>
+                  <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography href="/signin" textAlign="center">Signin</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography href="/signup" textAlign="center">Signup</Typography>
+                </MenuItem>
+                </div>
+                
+              }
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -120,7 +132,7 @@ function Navbar() {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -138,7 +150,8 @@ function Navbar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                component='a'
+                href={page}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
@@ -146,58 +159,59 @@ function Navbar() {
             ))}
           </Box>
           {
-            currentUser ? 
-            <>
-            <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src={currentUser.profileImageURL} />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <Link to='/dashboard/?tab=profile' style={{ textDecoration: "none", color: "black" }}>
-                <MenuItem>
-                    <Typography textAlign="center">Profile</Typography>
-                </MenuItem>
-              </Link>
-                <MenuItem onClick={handleSignout}>
-                    <Typography textAlign="center">Signout</Typography>
-                </MenuItem>
-            </Menu>
-            </Box>
-            </>
-            :
-            <>
-            <Box sx={{  display: { xs: 'none', md: 'flex' } }}>
-              {pages1.map((pages1) => (
-                <Link to={pages1}>
-                  <Button
-                    key={pages1}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
+            currentUser ?
+              <>
+                <Box sx={{ flexGrow: 0 }}>
+                  <Tooltip title="Open settings">
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <Avatar alt="Remy Sharp" src={currentUser.profileImageURL} />
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: '45px' }}
+                    id="menu-appbar"
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
                   >
-                    {pages1}
-                  </Button>
-                </Link>
-              ))}
-            </Box>
-            </>
+                    <Link to='/dashboard/?tab=profile' style={{ textDecoration: "none", color: "black" }}>
+                      <MenuItem>
+                        <Typography textAlign="center">Profile</Typography>
+                      </MenuItem>
+                    </Link>
+                    <MenuItem onClick={handleSignout}>
+                      <Typography textAlign="center">Signout</Typography>
+                    </MenuItem>
+                  </Menu>
+                </Box>
+              </>
+              :
+              <>
+                <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                  {pages1.map((pages1) => (
+                    <Button
+                      key={pages1}
+                      component='a'
+                      href={pages1}
+                      sx={{ my: 2, color: 'white', display: 'block' }}
+                    >
+                      {pages1}
+                    </Button>
+
+                  ))}
+                </Box>
+              </>
           }
-          
-          
+
+
         </Toolbar>
       </Container>
     </AppBar>

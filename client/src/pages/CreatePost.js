@@ -13,6 +13,8 @@ export default function CreatePost() {
       setFormData({...formData, [e.target.name]:e.target.value})
     })
 
+    
+
     const handleSubmit =async (e) => {
       e.preventDefault();
       if(!formData.title || !formData.location || !formData.budget ||  !formData.days  || !formData.description){

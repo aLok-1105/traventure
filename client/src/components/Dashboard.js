@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import DashSide from './DashSide';
 import DashProfile from './DashProfile';
 
 export default function Dashboard() {
@@ -18,7 +17,7 @@ export default function Dashboard() {
 
   return (
     <div style={{display:'flex'}}>
-        <DashSide/>
+        {/* <DashSide/> */}
         {
             tab === 'profile' && <DashProfile/> 
         }

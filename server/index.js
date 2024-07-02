@@ -15,8 +15,8 @@ app.use(checkForAuthenticationAndCookie('token'));
 
 dotenv.config({ path: './config.env' });
 app.use(cors({
-    origin: 'http://localhost:3000',  // Replace with your frontend URL
-    credentials: true,  // Allows cookies to be sent from frontend to backend
+    origin: 'http://localhost:3000',  
+    credentials: true,  
   }));
 
 moongoose.connect(process.env.MONGO_URL, {
