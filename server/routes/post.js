@@ -30,4 +30,36 @@ router.post('/create', validateToken1, async (req, res)=>{
 
 })
 
+
+router.get('/getPost', async (req, res, next)=>{
+    try {
+        const startIdx = parseInt(req.query.startIdx) || 0;
+        const limit = parseInt(req.query.limit) || 9;
+        const sortDirection = req.query.order == 'asc' ? 1 : -1;
+        const posts = await Post.find({
+            // ...(req.query.createdBy && {createdBy: req.query.createdBy}),
+            ...(req.query.title && {title: req.query.title}),
+            ...(req.query.location && {location: req.query.location}),
+            ...(req.query.budget && {budget: req.query.budget}),
+            ...(req.query.days && {days: req.query.days}),
+            ...(req.query.description && {description: req.query.description}),
+            ...(req.query.searchTerm && {
+                $or: [
+                    {title: {$regex: req.query.searchTerm, $options: 'i'}},
+                    {location: {$regex: req.query.searchTerm, $options: 'i'}},
+                    {description: {$regex: req.query.searchTerm, $options: 'i'}},
+                ],
+            }),
+        }).sort({updatedAt: sortDirection})
+        .skip(startIdx)
+        .limit(limit);
+
+        res.status(200).json({posts: posts});
+
+    } catch (error) {
+        next(error)
+    }
+    
+})
+
 module.exports = router

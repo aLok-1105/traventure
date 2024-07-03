@@ -1,5 +1,5 @@
-import { Box, Button, CircularProgress, Grid, Input, TextField } from '@mui/material'
-import React, { useEffect, useState } from 'react';
+import { Alert, Box, Button , Grid, Input, TextField } from '@mui/material'
+import React, { useState } from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Container from '@mui/material/Container';
 // import ReactQuill from 'react-quill';
@@ -64,7 +64,7 @@ export default function CreatePost() {
         }
         catch (error) {
         setImgUploadError("Image Upload Error");
-        setFormData({ ...formData, imageURL: null });
+        setFormData({ ...formData, imageURL: imgFileUrl });
       }
         
     };
@@ -198,6 +198,11 @@ export default function CreatePost() {
                   Submit
             </Button>
             </Grid>
+            {
+              imgUploadError && (
+                <Alert variant="filled" severity="error">{imgUploadError}</Alert>
+              )
+            }
           </Grid>
         </Box>
       </Box>
