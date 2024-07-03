@@ -50,11 +50,12 @@ router.get('/getPost', async (req, res, next)=>{
                     {description: {$regex: req.query.searchTerm, $options: 'i'}},
                 ],
             }),
-        }).sort({updatedAt: sortDirection})
+        }).populate("createdBy")
+        .sort({updatedAt: sortDirection})
         .skip(startIdx)
         .limit(limit);
 
-        res.status(200).json({posts: posts});
+        res.status(200).json(posts);
 
     } catch (error) {
         next(error)

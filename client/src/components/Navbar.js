@@ -19,7 +19,7 @@ import { signoutSuccess } from '../redux/user/userSlice';
 import axios from 'axios';
 
 
-const pages = ['Blogs', 'About', 'Contact'];
+const pages = ['Post', 'About', 'Contact'];
 const pages1 = ['Signin', 'Signup'];
 
 function Navbar() {
@@ -110,17 +110,17 @@ function Navbar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography style={{textDecoration: "None"}} component='a' href={page} textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
               {
                 !currentUser &&
                 <div>
                   <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography href="/signin" textAlign="center">Signin</Typography>
+                  <Typography style={{textDecoration: "None"}} component='a' href="/signin" textAlign="center">Signin</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography href="/signup" textAlign="center">Signup</Typography>
+                  <Typography style={{textDecoration: "None"}} component='a' href="/signup" textAlign="center">Signup</Typography>
                 </MenuItem>
                 </div>
                 

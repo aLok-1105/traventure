@@ -6,6 +6,7 @@ import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import CreatePost from './pages/CreatePost';
+import ShowPosts from './pages/ShowPosts';
 
 function App() {
   return (
@@ -32,6 +33,10 @@ function App() {
         </Route>
         <Route path='/create-post' element={
           <CreatePost/>
+        }>
+        </Route>
+        <Route path='/post' element={
+          <ShowPosts/>
         }>
         </Route>
         <Route path='*' element={
