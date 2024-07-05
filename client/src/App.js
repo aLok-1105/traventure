@@ -9,6 +9,8 @@ import CreatePost from './pages/CreatePost';
 import ShowPosts from './pages/ShowPosts';
 
 function App() {
+
+
   return (
     <>
       <Navbar/>

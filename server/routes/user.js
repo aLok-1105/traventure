@@ -66,6 +66,20 @@ router.post('/signout', (req, res, next) =>{
     
 })
 
+router.get('/auth', (req, res, next) => {
+  try {
+    const token = req.cookies.token;
+    if(token){
+      res.status(200).json({ message: 'Valid User'})
+    }
+    else{
+      res.status(404).json({ message: 'Unauthorized'})
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.put('/update/:id', validateToken1, async (req, res, next) => {
     if (req.user._id !== req.params.id) {
       return next('You are not allowed to update this user');
