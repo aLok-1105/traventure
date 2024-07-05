@@ -29,7 +29,7 @@ router.post('/signup', async (req, res)=>{
         });
     } catch (error) {
         res.status(422).send({ error: "Registration Not Successful" });
-		    console.log(error);
+		    // console.log(error);
     }
 })
 

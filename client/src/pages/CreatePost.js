@@ -8,6 +8,7 @@ import axios from 'axios';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreatePost() {
       
@@ -17,12 +18,15 @@ export default function CreatePost() {
     const [imgUploading, setImgUploading] = useState(false);
     const [imgUploadError, setImgUploadError] = useState(null);
     const [imgUploadProgress, setImgUploadProgress] = useState(null);
-
+    const navigate = useNavigate();
+    
+      
     const handleChange = ((e)=>{
       setFormData({...formData, [e.target.name]:e.target.value})
+
     })
 
-
+  
 
     const handleUpload = async () => {
       try {
@@ -79,19 +83,23 @@ export default function CreatePost() {
       }
       else{
         try {
-          const res = await axios.post('http://localhost:8000/post/create', {formData}, {withCredentials: true })
-          console.log(res);
+           await axios.post('http://localhost:8000/post/create', {formData}, {withCredentials: true })
+          //console.log(res);
+          navigate('posts')
         } catch (error) {
           console.log("error", error);
         }
       }
     }
 
+    
+
 
 
   return (
     <>
         <Container component="main" maxWidth="sm">
+        
       <Box
         display="flex"
         flexDirection="column"
@@ -121,8 +129,34 @@ export default function CreatePost() {
               id="location"
               onChange={handleChange}
               />
+              {/* <Autocomplete
+                freeSolo
+                name='location'
+                options={suggestions}
+                getOptionLabel={(option) => (option.display_name ? option.display_name : '')}
+                onInputChange={handleChangeO}
+                onChange={handleSelect}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    onChange={handleChange}
+                    label="Location"
+                    variant="outlined"
+                    name = 'location'
+                    fullWidth
+                  />
+                )}
+                renderOption={(props, option) => (
+                  // <li {...props}>
+                    <div {...props} key={option.place_id}>
+                      <div className="autocomplete-suggestion-name">{option.display_place}</div>
+                      <div className="autocomplete-suggestion-address">{option.display_address}</div>
+                    </div>
+                   </li> 
+                )}
+              /> */}
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
             <TextField 
               label="Budget" 
               fullWidth 
@@ -132,7 +166,17 @@ export default function CreatePost() {
               onChange={handleChange}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
+            <TextField 
+              label="No. of travellers" 
+              fullWidth 
+              name="groupSize"
+              required
+              id="groupSize"
+              onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={4}>
             <TextField 
               label="Days" 
               fullWidth 

@@ -30,7 +30,7 @@ function validateToken1(req, res, next) {
     jwt.verify(token, secret, (err, user) => {
         if (err) {
             console.log("error", err);
-          return next();
+            return next();
         }
         req.user = user;
         next();

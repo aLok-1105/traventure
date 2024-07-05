@@ -17,6 +17,10 @@ const postSchema = mongoose.Schema({
         type: Number,
         required:true
     },
+    groupSize:{
+        type: Number,
+        required:true
+    },
     description:{
         type:String,
         required: true

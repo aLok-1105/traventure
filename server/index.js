@@ -19,6 +19,8 @@ app.use(cors({
     credentials: true,  
   }));
 
+  console.log(process.env.NODE_ENV);
+
 moongoose.connect(process.env.MONGO_URL, {
 }).then(()=>{
     console.log('connected to db');
