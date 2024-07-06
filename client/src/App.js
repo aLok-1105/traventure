@@ -7,9 +7,31 @@ import Dashboard from './components/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import CreatePost from './pages/CreatePost';
 import ShowPosts from './pages/ShowPosts';
+import { useDispatch } from 'react-redux';
+import { signoutSuccess } from './redux/user/userSlice';
+import { useEffect } from 'react';
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token || tokenIsInvalid(token)) {
+      dispatch(signoutSuccess());
+    }
+  }, [dispatch]);
 
+  const tokenIsInvalid = (token) => {
+    return isTokenExpired(token);
+  };
+
+  const isTokenExpired = (token) => {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp < Date.now() / 1000;
+    } catch (e) {
+      return true;
+    }
+  };
 
   return (
     <>

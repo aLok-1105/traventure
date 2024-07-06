@@ -186,7 +186,7 @@ function Navbar() {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    <Link to='/dashboard/?tab=profile' style={{ textDecoration: "none", color: "black" }}>
+                    <Link to='/dashboard' style={{ textDecoration: "none", color: "black" }}>
                       <MenuItem>
                         <Typography textAlign="center">Profile</Typography>
                       </MenuItem>
