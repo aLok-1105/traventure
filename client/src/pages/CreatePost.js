@@ -20,7 +20,6 @@ export default function CreatePost() {
     const [imgUploadProgress, setImgUploadProgress] = useState(null);
     const navigate = useNavigate();
     
-      
     const handleChange = ((e)=>{
       setFormData({...formData, [e.target.name]:e.target.value})
 
@@ -85,7 +84,7 @@ export default function CreatePost() {
         try {
            await axios.post('http://localhost:8000/post/create', {formData}, {withCredentials: true })
           //console.log(res);
-          navigate('posts')
+          navigate('/posts')
         } catch (error) {
           console.log("error", error);
         }

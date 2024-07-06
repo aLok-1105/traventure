@@ -9,6 +9,7 @@ export default function Dashboard() {
     useEffect(()=>{
         const urlParams = new URLSearchParams(location.search);
         const tabUrl = urlParams.get('tab')
+        console.log(tabUrl);
         
         if(tabUrl){
             setTab(tabUrl)
@@ -17,10 +18,11 @@ export default function Dashboard() {
 
   return (
     <div style={{display:'flex'}}>
+    <DashProfile/> 
         {/* <DashSide/> */}
-        {
+        {/* {
             tab === 'profile' && <DashProfile/> 
-        }
+        } */}
 
     </div>
   )

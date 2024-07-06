@@ -108,11 +108,15 @@ function Navbar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography style={{textDecoration: "None"}} component='a' href={page} textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem >
+                <Typography style={{textDecoration: "None"}} component='a' href='/post' textAlign="center">Post</Typography>
+              </MenuItem>
+              <MenuItem >
+                <Typography style={{textDecoration: "None"}} component='a' href='/about' textAlign="center">About</Typography>
+              </MenuItem>
+              <MenuItem >
+                <Typography style={{textDecoration: "None"}} component='a' href='/contact' textAlign="center">Contact</Typography>
+              </MenuItem>
               {
                 !currentUser &&
                 <div>
@@ -151,7 +155,7 @@ function Navbar() {
               <Button
                 key={page}
                 component='a'
-                href={page}
+                href={'/'+page}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
