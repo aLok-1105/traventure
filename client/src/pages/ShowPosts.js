@@ -9,7 +9,6 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import axios from 'axios';
 import {
   Alert,
@@ -17,16 +16,10 @@ import {
   Button,
   Container,
   Dialog,
-  DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle,
   Grid,
   Input,
-  Menu,
-  MenuItem,
   TextField,
-  Typography,
 } from '@mui/material';
 import moment from 'moment';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -38,15 +31,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
-import { useNavigate } from 'react-router-dom';
 
 export default function RecipeReviewCard() {
   const [allPosts, setAllPosts] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showMore, setShowMore] = useState(true);
   const videoRef = useRef(null);
-  const [open, setOpen] = useState(false);
   const { currentUser } = useSelector((state) => (state.user));
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({});
@@ -56,8 +46,9 @@ export default function RecipeReviewCard() {
   const [imgUploadError, setImgUploadError] = useState(null);
   const [imgUploadProgress, setImgUploadProgress] = useState(null);
 
+
   const [clickedId, setClickedId] = useState(null);
-  const navigate = useNavigate();
+
 
   const handleChange = (e)=>{
     setFormData({...formData, [e.target.name]: e.target.value});
@@ -66,8 +57,8 @@ export default function RecipeReviewCard() {
 
       try {
         
-        await axios.put(`http://localhost:8000/post/update/${id}`, formData, {withCredentials: true })
-        navigate('/')
+        await axios.put(`http://localhost:8000/post/update/${id}`, formData, {withCredentials: true });
+        setClickedId(null);
 
       } catch (error) {
         console.log("error", error);
@@ -78,7 +69,6 @@ export default function RecipeReviewCard() {
     if(currentUser._id === id){
       console.log(post_id);
       setClickedId(post_id)
-      setOpen(true);
     }
     else{
       setError('Unauthorize');
@@ -131,12 +121,23 @@ export default function RecipeReviewCard() {
       
   };
 
-
-  
-
   const handleClose = () => {
-    setOpen(false);
+    setClickedId(null)
   };
+
+  const handleDeleteClick = async (id, postId)=>{
+    if(id === currentUser._id){
+      try {
+        await axios.delete(`http://localhost:8000/post/deletePost/${postId}`);
+        window.location.reload();
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+    else{
+      setError('Unauthorize')
+    }
+  }
 
   React.useEffect(() => {
     if (videoRef.current) {
@@ -150,7 +151,7 @@ export default function RecipeReviewCard() {
         const res = await axios.get(
           'http://localhost:8000/post/getPost'
         );
-        console.log(res.data);
+        // console.log(res.data);
         setAllPosts(res.data);
         if (res.data.length < 9) {
           setShowMore(false);
@@ -164,10 +165,6 @@ export default function RecipeReviewCard() {
     getPosts();
   }, []);
 
-  const handleMoreClick = (id) => {
-    // setAnchorEl(event.currentTarget);
-    // console.log(id);
-  };
 
   const handleShowMore = async (e) => {
     const startIndex = allPosts.length;
@@ -191,7 +188,7 @@ export default function RecipeReviewCard() {
   return (
     <>
       {loading ? (
-        <Box
+        <Grid
           sx={{
             display: 'flex',
             justifyContent: 'center',
@@ -201,7 +198,7 @@ export default function RecipeReviewCard() {
             overflow: 'hidden',
           }}>
           <video
-            ref={videoRef}
+            
             src='/Logo.mp4'
             autoPlay
             loop
@@ -211,9 +208,10 @@ export default function RecipeReviewCard() {
               height: '150px',
             }}
           />
-        </Box>
+        </Grid>
       ) : (
         <Grid
+
           container
           spacing={1}
           sx={{
@@ -223,9 +221,9 @@ export default function RecipeReviewCard() {
           }}>
           
           {allPosts.map((post) => (
-            <>
+            <React.Fragment key={post._id}>
             <Grid
-              key={post._id}
+              
               item
               sx={{ gridColumn: '3', padding: '0px' }}>
               <Card sx={{ width: 320, margin: 4 }}>
@@ -251,37 +249,6 @@ export default function RecipeReviewCard() {
                         <EditIcon/>
                         
                       </IconButton>
-                      {/* <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(
-                          anchorEl
-                        )}
-                        onClose={
-                          handleCloseNav
-                        }>
-                        <div>
-                          {post.createdBy._id}
-                        </div>
-                        <MenuItem
-                          onClick={()=>{handleEditClick(post.createdBy._id)}}>
-                          <Typography
-                            component='a'
-                            href='#'
-                            sx={{
-                              textDecoration:
-                                'none',
-                            }}>
-                            Edit
-                          </Typography>
-                        </MenuItem>
-                        
-                        <MenuItem>
-                        <Typography
-                        >
-                          {post.createdBy.fullName}
-                        </Typography>
-                        </MenuItem>
-                      </Menu> */}
                     </>
                   }
                   title={post.title}
@@ -296,11 +263,6 @@ export default function RecipeReviewCard() {
                   image={post.imageURL}
                   alt={post.imageURL}
                 />
-                {/* <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  {post.description}
-                </Typography>
-              </CardContent> */}
                 <CardActions disableSpacing sx={{display: 'flex', justifyContent:'space-between'}}>
                   <IconButton aria-label='add to favorites'>
                     <FavoriteIcon />
@@ -320,9 +282,9 @@ export default function RecipeReviewCard() {
                   <IconButton aria-label='share'>
                     <LocationOnIcon />
                   </IconButton>
-                  {post.location.slice(0, 20) +
+                  {post.location.length< 20 ?  post.location : post.location.slice(0, 20)+
                     '...'}
-                  <IconButton aria-label='share'>
+                  <IconButton aria-label='share' onClick = {()=>handleDeleteClick(post.createdBy._id, post._id)}>
                     <DeleteIcon/>
                   </IconButton>
                     
@@ -332,7 +294,7 @@ export default function RecipeReviewCard() {
                   open={clickedId===post._id}
                   onClose={handleClose}
                   >
-                  <DialogTitle>{post.title}</DialogTitle>
+                  {/* <DialogTitle>{post.title}</DialogTitle> */}
                   <DialogContent>
                   <Container component="main" maxWidth="sm">
         <Box
@@ -468,7 +430,7 @@ export default function RecipeReviewCard() {
               </Grid>
               {
                 imgUploadError && (
-                  <Alert variant="filled" severity="error">{imgUploadError}</Alert>
+                  <Alert variant="filled" severity="error">{imgUploadError || error}</Alert>
                 )
               }
             </Grid>
@@ -480,7 +442,7 @@ export default function RecipeReviewCard() {
                   
                 </Dialog>
             </Grid>
-</>
+</React.Fragment>
           ))}
           {showMore && allPosts.length > 0 ? (
             <>

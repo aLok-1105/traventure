@@ -23,7 +23,7 @@ export default function DashProfile() {
 
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({});
-    const [img, setImg] = useState(null);
+    // const [img, setImg] = useState(null);
     const [imgFile, setImgFile] = useState(null);
     const [imgFileUrl, setImgFileUrl] = useState(null);
     const [imgUploading, setImgUploading] = useState(null);
@@ -74,7 +74,7 @@ export default function DashProfile() {
                     'Could not upload image (File must be less than 5MB)'
                 );
                 setImgUploadProgress(null);
-                setImg(null);
+                // setImg(null);
                 setImgFileUrl(null);
                 setImgUploading(false);
             },
@@ -212,6 +212,7 @@ export default function DashProfile() {
                                         <Button
                                             fullWidth
                                             variant="contained"
+                                            disabled={imgUploading}
                                             sx={{ mt: 3, mb: 2 }}
                                         >
                                             Create Post
@@ -223,7 +224,7 @@ export default function DashProfile() {
                     </Box>
                     {error && (
                         <Alert variant="filled" severity="error">
-                            {error}
+                            {error || imgUploadError}
                         </Alert>
                     )}
                 </Container>

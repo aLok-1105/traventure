@@ -78,7 +78,7 @@ router.put('/update/:id',  async (req ,res)=>{
                 days: req.body.days,
                 description: req.body.description,
                 groupSize: req.body.groupSize,
-                imageURL: req.body.imageURL == null ? 'https://images.pexels.com/photos/620337/pexels-photo-620337.jpeg?cs=srgb&dl=pexels-pripicart-620337.jpg&fm=jpg' : req.body.imageURL,
+                imageURL: req.body.imageURL,
             },
         
         },
@@ -88,6 +88,17 @@ router.put('/update/:id',  async (req ,res)=>{
         res.status(200).json(updatePost);
     } catch (error) {
         res.status(404).json({ message: error.message})
+    }
+})
+
+router.delete('/deletePost/:id', async(req, res)=>{
+    // console.log(req.params.id);
+    try {
+        const deletedPost = await Post.deleteOne({_id : req.params.id});
+        console.log(deletedPost);
+        res.status(200).json(deletedPost);
+    } catch (error) {
+        res.status(400).json({message:error.message})
     }
 })
 
