@@ -238,6 +238,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
+import { Avatar, IconButton, Menu, Tooltip } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { signoutSuccess } from '../redux/user/userSlice';
 
 const logoStyle = {
   width: '140px',
@@ -247,24 +252,36 @@ const logoStyle = {
 
 function Navbar({ mode, toggleColorMode }) {
   const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user)
+
+    const handleSignout = async () => {
+    try {
+      await axios.post('http://localhost:8000/user/signout', {}, { withCredentials: true });
+      dispatch(signoutSuccess())
+      navigate('/')
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
 
-  const scrollToSection = (sectionId) => {
-    const sectionElement = document.getElementById(sectionId);
-    const offset = 128;
-    if (sectionElement) {
-      const targetScroll = sectionElement.offsetTop - offset;
-      sectionElement.scrollIntoView({ behavior: 'smooth' });
-      window.scrollTo({
-        top: targetScroll,
-        behavior: 'smooth',
-      });
-      setOpen(false);
-    }
-  };
 
   return (
     <div>
@@ -311,52 +328,40 @@ function Navbar({ mode, toggleColorMode }) {
             >
               <img
                 src={
-                  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
+                  ''
                 }
                 style={logoStyle}
                 alt="logo of sitemark"
               />
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <MenuItem
-                  onClick={() => scrollToSection('features')}
+                  component='a'
+                  href='/post'
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                    Features
+                    Posts
                   </Typography>
                 </MenuItem>
                 <MenuItem
-                  onClick={() => scrollToSection('testimonials')}
+                  component='a'
+                  href='/about'
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                    Testimonials
+                    About
                   </Typography>
                 </MenuItem>
                 <MenuItem
-                  onClick={() => scrollToSection('highlights')}
+                  component='a'
+                  href='/contact'
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                    Highlights
+                    Contact
                   </Typography>
                 </MenuItem>
-                <MenuItem
-                  onClick={() => scrollToSection('pricing')}
-                  sx={{ py: '6px', px: '12px' }}
-                >
-                  <Typography variant="body2" color="text.primary">
-                    Pricing
-                  </Typography>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => scrollToSection('faq')}
-                  sx={{ py: '6px', px: '12px' }}
-                >
-                  <Typography variant="body2" color="text.primary">
-                    FAQ
-                  </Typography>
-                </MenuItem>
+                
               </Box>
             </Box>
             <Box
@@ -367,13 +372,51 @@ function Navbar({ mode, toggleColorMode }) {
               }}
             >
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-              <Button
+              
+              {
+                currentUser ? (
+                  <>
+                 <Box sx={{ flexGrow: 0 }}>
+                   <Tooltip title="Open settings">
+                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                       <Avatar alt="Remy Sharp" src={currentUser.profileImageURL} />
+                     </IconButton>
+                   </Tooltip>
+                   <Menu
+                    sx={{ mt: '45px' }}
+                    anchorEl={anchorElUser}
+                    id="menu-appbar"
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    <Link to='/dashboard' style={{ textDecoration: "none", color: "black" }}>
+                      <MenuItem>
+                        <Typography textAlign="center">Profile</Typography>
+                      </MenuItem>
+                    </Link>
+                    <MenuItem onClick={handleSignout}>
+                      <Typography textAlign="center">Signout</Typography>
+                    </MenuItem>
+                  </Menu>
+                </Box>
+              </>
+                ) : (
+                  <>
+                  <Button
                 color="primary"
                 variant="text"
                 size="small"
                 component="a"
-                href="/material-ui/getting-started/templates/sign-in/"
-                target="_blank"
+                href="/signin"
               >
                 Sign in
               </Button>
@@ -382,13 +425,23 @@ function Navbar({ mode, toggleColorMode }) {
                 variant="contained"
                 size="small"
                 component="a"
-                href="/material-ui/getting-started/templates/sign-up/"
-                target="_blank"
+                href="/signup"
+                
               >
                 Sign up
               </Button>
+              </>
+                )
+              }
+              
             </Box>
             <Box sx={{ display: { sm: '', md: 'none' } }}>
+            {
+                  currentUser && 
+                  (<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                       <Avatar alt="Remy Sharp" src={currentUser.profileImageURL} />
+                     </IconButton>)
+                }
               <Button
                 variant="text"
                 color="primary"
@@ -407,6 +460,7 @@ function Navbar({ mode, toggleColorMode }) {
                     flexGrow: 1,
                   }}
                 >
+                
                   <Box
                     sx={{
                       display: 'flex',
@@ -417,27 +471,57 @@ function Navbar({ mode, toggleColorMode }) {
                   >
                     <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
                   </Box>
-                  <MenuItem onClick={() => scrollToSection('features')}>
-                    Features
+                  <MenuItem component='a'
+                  href='/post'>
+                    Posts
                   </MenuItem>
-                  <MenuItem onClick={() => scrollToSection('testimonials')}>
-                    Testimonials
+                  <MenuItem component='a'
+                  href='/about'>
+                    About
                   </MenuItem>
-                  <MenuItem onClick={() => scrollToSection('highlights')}>
-                    Highlights
+                  <MenuItem component='a'
+                  href='/contact'>
+                    Contact
                   </MenuItem>
-                  <MenuItem onClick={() => scrollToSection('pricing')}>
-                    Pricing
-                  </MenuItem>
-                  <MenuItem onClick={() => scrollToSection('faq')}>FAQ</MenuItem>
                   <Divider />
-                  <MenuItem>
+                  
+                  {
+                    currentUser ? (
+                      <>
+                      <MenuItem>
                     <Button
                       color="primary"
                       variant="contained"
                       component="a"
-                      href="/material-ui/getting-started/templates/sign-up/"
-                      target="_blank"
+                      href="/dashboard"
+                       
+                      sx={{ width: '100%' }}
+                    >
+                      Profile
+                    </Button>
+                  </MenuItem>
+                  <MenuItem>
+                    <Button
+                      color="primary"
+                      variant="outlined"
+                      onClick={handleSignout}
+                       
+                      sx={{ width: '100%' }}
+                    >
+                      Signout
+                    </Button>
+                  </MenuItem>
+                      </>
+                    )
+                    : (
+                      <>
+                      <MenuItem>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      component="a"
+                      href="/signup"
+                       
                       sx={{ width: '100%' }}
                     >
                       Sign up
@@ -448,13 +532,17 @@ function Navbar({ mode, toggleColorMode }) {
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href="/material-ui/getting-started/templates/sign-in/"
-                      target="_blank"
+                      href="/signin"
+                       
                       sx={{ width: '100%' }}
                     >
                       Sign in
                     </Button>
                   </MenuItem>
+                  </>
+                    )
+                  }
+                  
                 </Box>
               </Drawer>
             </Box>

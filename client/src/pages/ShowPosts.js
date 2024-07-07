@@ -218,6 +218,7 @@ export default function RecipeReviewCard() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+          marginTop:'100px'
           }}>
           
           {allPosts.map((post) => (

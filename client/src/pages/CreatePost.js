@@ -97,7 +97,7 @@ export default function CreatePost() {
 
   return (
     <>
-        <Container component="main" maxWidth="sm">
+        <Container component="main" maxWidth="sm" sx={{marginTop:'100px'}}>
         
       <Box
         display="flex"

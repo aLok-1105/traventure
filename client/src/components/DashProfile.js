@@ -113,7 +113,7 @@ export default function DashProfile() {
             spacing={0}
             direction="column"
             alignItems="center"
-            justifyContent="center" style={{ marginTop: '-50px', textAlign: 'center' }} >
+            justifyContent="center" style={{ marginTop: '60px', textAlign: 'center' }} >
 
             <ThemeProvider theme={defaultTheme}>
                 <Container component="main" maxWidth="xs">
