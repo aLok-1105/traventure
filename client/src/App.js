@@ -10,11 +10,13 @@ import ShowPosts from './pages/ShowPosts';
 import { useDispatch } from 'react-redux';
 import { signoutSuccess } from './redux/user/userSlice';
 import { useEffect } from 'react';
+import Cookies from 'js-cookie';
+
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('token');
     if (!token || tokenIsInvalid(token)) {
       dispatch(signoutSuccess());
     }

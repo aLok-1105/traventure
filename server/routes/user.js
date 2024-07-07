@@ -44,7 +44,6 @@ router.post('/signin', async(req, res)=>{
         const validUser = await User.findOne({ email });
         const token = await User.matchPassowrdAndGenerateToken(email, password);
         res.cookie('token', token, {
-            httpOnly: true,
             secure: true,
           });
           const { password: pass, ...rest } = validUser._doc;

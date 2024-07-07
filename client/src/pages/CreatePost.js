@@ -84,7 +84,7 @@ export default function CreatePost() {
         try {
            await axios.post('http://localhost:8000/post/create', {formData}, {withCredentials: true })
           //console.log(res);
-          navigate('/posts')
+          navigate('/post')
         } catch (error) {
           console.log("error", error);
         }

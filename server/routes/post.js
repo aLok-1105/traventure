@@ -44,6 +44,7 @@ router.get('/getPost', async (req, res, next)=>{
             ...(req.query.budget && {budget: req.query.budget}),
             ...(req.query.days && {days: req.query.days}),
             ...(req.query.description && {description: req.query.description}),
+            ...(req.query.createdBy && {description: req.query.createdBy}),
             ...(req.query.searchTerm && {
                 $or: [
                     {title: {$regex: req.query.searchTerm, $options: 'i'}},
@@ -56,12 +57,38 @@ router.get('/getPost', async (req, res, next)=>{
         .skip(startIdx)
         .limit(limit);
 
+        // console.log(posts[0].createdBy);
+
         res.status(200).json(posts);
 
     } catch (error) {
         next(error)
     }
     
+})
+
+router.put('/update/:id',  async (req ,res)=>{
+    try {
+        const updatePost = await Post.findByIdAndUpdate(req.params.id, {
+            
+            $set:{
+                title: req.body.title,
+                location: req.body.location,
+                budget: req.body.budget,
+                days: req.body.days,
+                description: req.body.description,
+                groupSize: req.body.groupSize,
+                imageURL: req.body.imageURL == null ? 'https://images.pexels.com/photos/620337/pexels-photo-620337.jpeg?cs=srgb&dl=pexels-pripicart-620337.jpg&fm=jpg' : req.body.imageURL,
+            },
+        
+        },
+            { new: true }
+        );
+        // console.log(updatePost);
+        res.status(200).json(updatePost);
+    } catch (error) {
+        res.status(404).json({ message: error.message})
+    }
 })
 
 module.exports = router
