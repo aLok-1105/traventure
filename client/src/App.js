@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { signoutSuccess } from './redux/user/userSlice';
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
+import Footer from './components/Footer';
 
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
         </Route>
       
       </Routes>
+      <Footer/>
     </>
   );
 }
