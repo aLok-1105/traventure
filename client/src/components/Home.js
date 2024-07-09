@@ -8,10 +8,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import './style.css'
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 // import Carousel from './Carosel';
 
 export default function Home() {
   const [allPosts, setAllPosts] = useState([]);
+
+  const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user)
+
   useEffect(() => {
     const getPosts = async () => {
       try {
@@ -32,7 +38,7 @@ export default function Home() {
 
   return (
     <>
-        <Box sx={{ textAlign:'center'}}>
+        <Box >
         <Box sx={{height:'100vh'}}>
           <video 
             src='/home3.mp4' 
@@ -42,17 +48,17 @@ export default function Home() {
             className='bg-video' />
         </Box>
         {/* //sx={{background:'url(/home3.jpg)', backgroundSize:'100vw 100vh', height:'100vh'}} */}
-          <Box >
-              <h1>
+          <Box className='hero-content'>
+              <h1 className='hero-head'>
                 Discover, Share, and Inspire Your Adventures!
               </h1>
               <Grid>
-                <Button >Create Your Post</Button>
-                <Button >Explore Destinations</Button>
+                <Button onClick={() => navigate(currentUser ? '/create-post' : '/signin')} className='hero-btn-1'>Create Your Post</Button>
+                <Button className='hero-btn-2' onClick={() =>navigate('/post') }>Explore Destinations</Button>
               </Grid>
           </Box>
-          <Box>
-            <h1>
+          <Box className='recent-post'>
+            <h1 className='recent-post-head'>
               Recent Posts
             </h1>
             <Grid container

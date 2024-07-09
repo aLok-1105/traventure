@@ -240,12 +240,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
 import { Avatar, IconButton, Menu, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { signoutSuccess } from '../redux/user/userSlice';
 
 const logoStyle = {
-  width: '140px',
+  width: '57px',
   height: 'auto',
   cursor: 'pointer',
 };
@@ -318,8 +318,6 @@ function Navbar({ mode, toggleColorMode }) {
             })}
           >
             <Box
-              component='a'
-              href='/'
               sx={{
                 flexGrow: 1,
                 display: 'flex',
@@ -329,39 +327,40 @@ function Navbar({ mode, toggleColorMode }) {
               }}
             >
               <img
-                src='/'
+                onClick={()=>navigate('/')}
+                src='/logo.png'
                 style={logoStyle}
                 alt="logo of sitemark"
                 
               />
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                <NavLink to='/post' style={{ textDecoration: 'NONE'}}>
                 <MenuItem
-                  component='a'
-                  href='/post'
-                  sx={{ py: '6px', px: '12px' }}
+                  sx={{ py: '6px', px: '12px',}}
                 >
-                  <Typography variant="body2" color="text.primary">
+                  <Typography variant="body2" color="text.primary" sx={{textDecoration: 'none' }}>
                     Posts
                   </Typography>
                 </MenuItem>
+                </NavLink>
+                <NavLink to='/about' style={{ textDecoration: 'NONE'}}>
                 <MenuItem
-                  component='a'
-                  href='/about'
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
                     About
                   </Typography>
                 </MenuItem>
+                  </NavLink>
+                <NavLink to='/about' style={{ textDecoration: 'NONE'}}>
                 <MenuItem
-                  component='a'
-                  href='/contact'
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
                     Contact
                   </Typography>
                 </MenuItem>
+                </NavLink>
                 
               </Box>
             </Box>

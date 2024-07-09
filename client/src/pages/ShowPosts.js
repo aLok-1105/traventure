@@ -254,7 +254,7 @@ export default function RecipeReviewCard() {
                   }
                   title={post.title}
                   subheader={moment(
-                    post.createdAt
+                    post.updatedAt
                   ).format('d MMM YYYY')}
                 />
 
