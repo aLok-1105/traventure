@@ -7,7 +7,8 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import Carousel from './Carosel';
+import './style.css'
+// import Carousel from './Carosel';
 
 export default function Home() {
   const [allPosts, setAllPosts] = useState([]);
@@ -28,9 +29,19 @@ export default function Home() {
   }, []);
 
 
+
   return (
     <>
-        <Box sx={{marginTop:'95px', textAlign:'center'}}>
+        <Box sx={{ textAlign:'center'}}>
+        <Box sx={{height:'100vh'}}>
+          <video 
+            src='/home3.mp4' 
+            autoPlay
+            loop
+            muted
+            className='bg-video' />
+        </Box>
+        {/* //sx={{background:'url(/home3.jpg)', backgroundSize:'100vw 100vh', height:'100vh'}} */}
           <Box >
               <h1>
                 Discover, Share, and Inspire Your Adventures!

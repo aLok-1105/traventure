@@ -318,6 +318,8 @@ function Navbar({ mode, toggleColorMode }) {
             })}
           >
             <Box
+              component='a'
+              href='/'
               sx={{
                 flexGrow: 1,
                 display: 'flex',
@@ -327,11 +329,10 @@ function Navbar({ mode, toggleColorMode }) {
               }}
             >
               <img
-                src={
-                  ''
-                }
+                src='/'
                 style={logoStyle}
                 alt="logo of sitemark"
+                
               />
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <MenuItem
