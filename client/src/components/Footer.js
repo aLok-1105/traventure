@@ -7,17 +7,19 @@ import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
 import FacebookIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import TwitterIcon from '@mui/icons-material/X';
+// import TwitterIcon from '@mui/icons-material/X';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const logoStyle = {
 	width: '140px',
 	height: 'auto',
 };
 
+
 export default function Footer() {
+	const matches = useMediaQuery('(min-width:585px)');
 	return (
 		<Container
 			sx={{
@@ -36,6 +38,7 @@ export default function Footer() {
 					flexDirection: { xs: 'column', sm: 'row' },
 					width: '100%',
 					justifyContent: 'space-between',
+					height:'160px',
 				}}>
 				<Box
 					sx={{
@@ -43,12 +46,12 @@ export default function Footer() {
 						flexDirection: 'column',
 						gap: 4,
 						minWidth: { xs: '100%', sm: '60%' },
+						marginTop:'-30px'
 						// padding:'20px 100px 20px 100px',
 					}}>
-					<Box sx={{ width: { xs: '100%', sm: '60%' } }}>
+					<Box sx={{display:'flex', flexDirection:'column', alignItems: !matches ? 'center' :'baseline', width: { xs: '100%', sm: '60%' } } }>
 						<Box
 							sx={{
-								ml: '-15px',
 								display: 'flex',
 								flexDirection: 'column',
 								alignItems: 'flex-start',
@@ -58,6 +61,9 @@ export default function Footer() {
 								style={logoStyle}
 								alt='Traventure'
 							/>
+						</Box>
+						<Box>
+							<p style={{fontFamily: "Dancing Script", fontSize:'40px', margin:'0px'}}>Traventure</p>
 						</Box>
 						<Box
 							sx={{
@@ -101,7 +107,7 @@ export default function Footer() {
 						sx={{
 							display: { xs: 'none', sm: 'flex' },
 							flexDirection: 'column',
-              alignItems: 'flex-start',
+              				alignItems: 'flex-start',
 							gap: 1,
 						}}>
 						<Typography variant='body2' fontWeight={600}>
@@ -122,7 +128,7 @@ export default function Footer() {
 			</Box>
       <Box sx={{
         borderTop: '1px solid gray',
-        width: '80vh',
+        width: '80vw',
         textAlign: 'center',
         display: 'flex',
         justifyContent: 'space-around',
@@ -138,23 +144,23 @@ export default function Footer() {
         >
           <IconButton
             color="inherit"
-            href="https://github.com/mui"
+            href="https://github.com/aLok-1105"
             aria-label="GitHub"
             sx={{ alignSelf: 'center' }}
           >
             <FacebookIcon />
           </IconButton>
-          <IconButton
+          {/* <IconButton
             color="inherit"
             href="https://x.com/MaterialUI"
             aria-label="X"
             sx={{ alignSelf: 'center' }}
           >
             <TwitterIcon />
-          </IconButton>
+          </IconButton> */}
           <IconButton
             color="inherit"
-            href="https://www.linkedin.com/company/mui/"
+            href="https://www.linkedin.com/in/alok-ranjan-19998a228/"
             aria-label="LinkedIn"
             sx={{ alignSelf: 'center' }}
           >

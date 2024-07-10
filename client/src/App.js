@@ -9,9 +9,12 @@ import CreatePost from './pages/CreatePost';
 import ShowPosts from './pages/ShowPosts';
 import { useDispatch } from 'react-redux';
 import { signoutSuccess } from './redux/user/userSlice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import Footer from './components/Footer';
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import About from './pages/About';
+import Contact from './pages/Contact';
 
 
 function App() {
@@ -36,9 +39,32 @@ function App() {
     }
   };
 
+  const [mode, setMode] = useState('light');
+  const toggleColorMode = () => {
+    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      'Inter',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif'
+    ].join(','),
+  },
+  // palette: {
+  //     mode: 'dark',
+  //   },
+});
+
+
   return (
     <>
-      <Navbar/>
+      <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Navbar mode={mode} toggleColorMode={toggleColorMode}/>
       <Routes>
         <Route path='/' element={
           <Home />
@@ -66,6 +92,14 @@ function App() {
           <ShowPosts/>
         }>
         </Route>
+        <Route path='/about' element={
+          <About/>
+        }>
+        </Route>
+        <Route path='/contact' element={
+          <Contact/>
+        }>
+        </Route>
         <Route path='*' element={
           <>This is 404 page</>
         }>
@@ -74,6 +108,7 @@ function App() {
       
       </Routes>
       <Footer/>
+      </ThemeProvider> 
     </>
   );
 }

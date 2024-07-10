@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, CardActions, CardHeader, CardMedia, Grid, IconButton } from '@mui/material'
+import { Avatar, Box, Button, Card, CardActions, CardHeader, CardMedia, Grid, IconButton, MobileStepper,  useMediaQuery } from '@mui/material'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import moment from 'moment';
@@ -10,11 +10,18 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import './style.css'
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import SwipeableViews from 'react-swipeable-views';
+import { autoPlay } from 'react-swipeable-views-utils';
+import { useTheme } from '@mui/material/styles';
+
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 // import Carousel from './Carosel';
 
 export default function Home() {
   const [allPosts, setAllPosts] = useState([]);
-
+  const theme = useTheme();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user)
 
@@ -22,7 +29,7 @@ export default function Home() {
     const getPosts = async () => {
       try {
         const res = await axios.get(
-          'http://localhost:8000/post/getPost/?limit=3'
+          'http://localhost:8000/post/getPost/?limit=5'
         );
         // console.log(res.data);
         setAllPosts(res.data);
@@ -33,6 +40,32 @@ export default function Home() {
 
     getPosts();
   }, []);
+
+  const [activeStep, setActiveStep] = React.useState(0);
+  // const maxSteps = allPosts.length;
+
+  
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
+
+  let postsPerPage = 1;
+  if (isMediumScreen) {
+    postsPerPage = 2;
+  } else if (isLargeScreen) {
+    postsPerPage = 3;
+  }
+  const maxSteps = Math.ceil(allPosts.length / postsPerPage);
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleStepChange = (step) => {
+    setActiveStep(step);
+  };
 
 
 
@@ -61,89 +94,128 @@ export default function Home() {
             <h1 className='recent-post-head'>
               Recent Posts
             </h1>
-            <Grid container
+
+            {/* <Grid container
             spacing={1}
               sx={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
+              > */}
+                {/* <AutoPlaySwipeableViews
+                  axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                  index={activeStep}
+                  onChangeIndex={handleStepChange}
+                  enableMouseEvents
+                > */}
+                <AutoPlaySwipeableViews
+            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+            index={activeStep}
+            onChangeIndex={handleStepChange}
+            enableMouseEvents
+          >
+            {Array.from({ length: maxSteps }).map((_, index) => (
+              <Grid
+                container
+                spacing={2}
+                justifyContent="center"
+                key={index}
               >
-              {allPosts.map((post) => (
-                <React.Fragment key={post._id}>
-                <Grid
-                item
-                sx={{ gridColumn: '3', padding: '0px' }}>
-                <Card sx={{ width: 320, margin: 4 }}>
-                  <CardHeader
-                    avatar={
-                      <Avatar
-                        src={
-                          post.createdBy
-                            .profileImageURL
-                        }
-                        sx={{
-                          // bgcolor: red[500],
-                        }}
-                        aria-label='recipe'></Avatar>
-                    }
-                    action={
-                      <>
-                        <IconButton
-                          aria-label='settings'
-                          // onClick = {()=>handleEditClick(post.createdBy._id, post._id)}
-                          >
-                          
-                          <EditIcon/>
-                          
-                        </IconButton>
-                      </>
-                    }
-                    title={post.title}
-                    subheader={moment(
-                      post.createdAt
-                    ).format('d MMM YYYY')}
-                  />
+                {allPosts.slice(index * postsPerPage, index * postsPerPage + postsPerPage).map((post) => (
+                  <Grid item key={post._id} xs={12} sm={6} md={4} sx={{
+                    display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'}}> 
+                  <Card sx={{ width: 320, mt:3, mb:3, ml:1, mr:1 }}>
+                <CardHeader
+                  avatar={
+                    <Avatar
+                      src={
+                        post.createdBy
+                          .profileImageURL
+                      }
+                      sx={{
+                        // bgcolor: red[500],
+                      }}
+                      aria-label='recipe'></Avatar>
+                  }
+                  action={
+                    <>
+                      <IconButton
+                        aria-label='settings'
+                        // onClick = {()=>handleEditClick(post.createdBy._id, post._id)}
+                        >
+                        
+                        <EditIcon/>
+                        
+                      </IconButton>
+                    </>
+                  }
+                  title={post.title}
+                  subheader={moment(post.updatedAt).format('MMMM Do YYYY')}
+                  // subheader={post.createdAt}
+                />
 
-                  <CardMedia
-                    component='img'
-                    height='194'
-                    image={post.imageURL}
-                    alt={post.imageURL}
-                  />
-                  <CardActions disableSpacing sx={{display: 'flex', justifyContent:'space-between'}}>
-                    <IconButton aria-label='add to favorites'>
-                      <FavoriteIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label='share'
-                      display='flex'>
-                      <GroupsIcon
-                        sx={{ fontSize: '30px' }}
-                      />
-                    </IconButton>
-                    <span>
-                      {post.groupSize
-                        ? post.groupSize
-                        : 0}
-                    </span>
-                    <IconButton aria-label='share'>
-                      <LocationOnIcon />
-                    </IconButton>
-                    {post.location.length< 20 ?  post.location : post.location.slice(0, 20)+
-                      '...'}
-                    <IconButton aria-label='share' 
-                    // onClick = {()=>handleDeleteClick(post.createdBy._id, post._id)}
-                    >
-                      <DeleteIcon/>
-                    </IconButton>
-                      
-                  </CardActions>
-                </Card>
-                </Grid>
-                </React.Fragment>
-              ))}
-            </Grid>
+                <CardMedia
+                  component='img'
+                  height='194'
+                  image={post.imageURL}
+                  alt={post.imageURL}
+                />
+                <CardActions disableSpacing sx={{display: 'flex', justifyContent:'space-between'}}>
+                  <IconButton aria-label='add to favorites'>
+                    <FavoriteIcon />
+                  </IconButton>
+                  <IconButton
+                    aria-label='share'
+                    display='flex'>
+                    <GroupsIcon
+                      sx={{ fontSize: '30px' }}
+                    />
+                  </IconButton>
+                  <span>
+                    {post.groupSize
+                      ? post.groupSize
+                      : 0}
+                  </span>
+                  <IconButton aria-label='share'>
+                    <LocationOnIcon />
+                  </IconButton>
+                  {post.location.length< 20 ?  post.location : post.location.slice(0, 20)+
+                    '...'}
+                  <IconButton aria-label='share'
+                   //onClick = {()=>handleDeleteClick(post.createdBy._id, post._id)}
+                   >
+                    <DeleteIcon/>
+                  </IconButton>
+                    
+                </CardActions>
+              </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            ))}
+          </AutoPlaySwipeableViews>
+          <MobileStepper
+            steps={maxSteps}
+            position="static"
+            activeStep={activeStep}
+            sx={{backgroundColor:'rgb(255 255 255 / 0%) !important'}}
+            nextButton={
+              <Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>
+                Next
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+              </Button>
+            }
+            backButton={
+              <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                Back
+              </Button>
+            }
+          />
+            
           </Box>
         </Box>
     </>

@@ -227,7 +227,7 @@ export default function RecipeReviewCard() {
               
               item
               sx={{ gridColumn: '3', padding: '0px' }}>
-              <Card sx={{ width: 320, margin: 4 }}>
+              <Card sx={{ width: 320, mt:3, mb:3, ml:1, mr:1 }}>
                 <CardHeader
                   avatar={
                     <Avatar
@@ -253,9 +253,8 @@ export default function RecipeReviewCard() {
                     </>
                   }
                   title={post.title}
-                  subheader={moment(
-                    post.updatedAt
-                  ).format('d MMM YYYY')}
+                  subheader={moment(post.updatedAt).format('MMMM Do YYYY')}
+                  // subheader={post.createdAt}
                 />
 
                 <CardMedia

@@ -19,7 +19,6 @@ app.use(cors({
     credentials: true,  
   }));
 
-  console.log(process.env.NODE_ENV);
 
 moongoose.connect(process.env.MONGO_URL, {
 }).then(()=>{
@@ -32,7 +31,7 @@ moongoose.connect(process.env.MONGO_URL, {
 
 
 app.get('/', (req, res)=>{
-    res.send('Hello');
+    res.send('Hello from Server');
 })
 
 app.use('/user', userRoute)
