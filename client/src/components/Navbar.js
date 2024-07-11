@@ -243,6 +243,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { signoutSuccess } from '../redux/user/userSlice';
+import { toast } from 'react-toastify';
+import { toastStyle } from './toastStyle';
 
 const logoStyle = {
   width: '57px',
@@ -258,11 +260,13 @@ function Navbar({ mode, toggleColorMode }) {
 
     const handleSignout = async () => {
     try {
-      await axios.post('http://localhost:8000/user/signout', {}, { withCredentials: true });
+      await axios.post('/user/signout', {}, { withCredentials: true });
+      toast.success('Succesfully Signout', toastStyle)
       dispatch(signoutSuccess())
       navigate('/')
 
     } catch (error) {
+      toast.warn(error.message, toastStyle)
       console.log(error.message);
     }
   };

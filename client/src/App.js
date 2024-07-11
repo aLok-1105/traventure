@@ -54,6 +54,15 @@ const theme = createTheme({
       'sans-serif'
     ].join(','),
   },
+  a:{
+    fontFamily: [
+      'Inter',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif'
+    ].join(','),
+  }
   // palette: {
   //     mode: 'dark',
   //   },

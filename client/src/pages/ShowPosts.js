@@ -31,6 +31,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
+import { toastStyle } from '../components/toastStyle';
+import { toast } from 'react-toastify';
 
 export default function RecipeReviewCard() {
   const [allPosts, setAllPosts] = useState([]);
@@ -57,20 +59,22 @@ export default function RecipeReviewCard() {
 
       try {
         
-        await axios.put(`http://localhost:8000/post/update/${id}`, formData, {withCredentials: true });
+        await axios.put(`/post/update/${id}`, formData, {withCredentials: true });
         setClickedId(null);
 
       } catch (error) {
+        toast.warn('Unauthorized', toastStyle);
         console.log("error", error);
       }
   };
 
   const handleEditClick = (id, post_id)=>{
     if(currentUser._id === id){
-      console.log(post_id);
-      setClickedId(post_id)
+      // console.log(post_id);
+      setClickedId(post_id);
     }
     else{
+      toast.warn('Unauthorized', toastStyle);
       setError('Unauthorize');
     }
   }
@@ -131,10 +135,12 @@ export default function RecipeReviewCard() {
         await axios.delete(`http://localhost:8000/post/deletePost/${postId}`);
         window.location.reload();
       } catch (error) {
+        toast.warn('Unauthorized', toastStyle);
         setError(error.message);
       }
     }
     else{
+      toast.warn('Unauthorized', toastStyle);
       setError('Unauthorize')
     }
   }

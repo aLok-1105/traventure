@@ -9,6 +9,8 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { toastStyle } from '../components/toastStyle';
 
 export default function CreatePost() {
       
@@ -78,15 +80,19 @@ export default function CreatePost() {
       e.preventDefault();
       console.log(formData);
       if(!formData.title || !formData.location || !formData.budget ||  !formData.days  || !formData.description){
-        alert("Please fill all the fields")
+        // alert("Please fill all the fields")
+        toast.warn("Please fill all the fields", toastStyle)
       }
       else{
         try {
-           await axios.post('http://localhost:8000/post/create', {formData}, {withCredentials: true })
-          //console.log(res);
+          const res = await axios.post('http://localhost:8000/post/create', {formData}, {withCredentials: true })
+          if(res.status === 201){
+            toast.success('Post Successfully Created', toastStyle)
+          }
           navigate('/post')
         } catch (error) {
-          console.log("error", error);
+          toast.success(error.message, toastStyle)
+          // console.log("error", error);
         }
       }
     }

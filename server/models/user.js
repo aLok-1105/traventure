@@ -43,7 +43,8 @@ userSchema.static('matchPassowrdAndGenerateToken', async function(email, passwor
     
     const isMatch = await bcryptjs.compare(password, user.password);
     if(!isMatch) {
-        throw new console.error("Invalid");
+        return null
+        // throw new console.error("Invalid");
     }
     
     const token = createToken(user);

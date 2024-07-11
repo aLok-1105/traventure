@@ -11,26 +11,28 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice';
-import { Alert, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import { ClassNames } from '@emotion/react';
 import { Link } from 'react-router-dom';
 import { app } from '../firebase';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {toastStyle} from './toastStyle';
 
 export default function DashProfile() {
 
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({});
-    // const [img, setImg] = useState(null);
     const [imgFile, setImgFile] = useState(null);
     const [imgFileUrl, setImgFileUrl] = useState(null);
     const [imgUploading, setImgUploading] = useState(null);
     const [imgUploadError, setImgUploadError] = useState(null);
     const [imgUploadProgress, setImgUploadProgress] = useState(null);
+    const { currentUser, loading } = useSelector((state) => state.user);
     const filePickerRef = useRef();
-    const { currentUser, loading, error } = useSelector((state) => state.user);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -40,9 +42,7 @@ export default function DashProfile() {
         const file = e.target.files[0];
         if (file) {
             setImgFile(file);
-            // console.log(imgFile.name);
             setImgFileUrl(URL.createObjectURL(file));
-            console.log(imgFileUrl);
         }
         
     }
@@ -74,7 +74,8 @@ export default function DashProfile() {
                     'Could not upload image (File must be less than 5MB)'
                 );
                 setImgUploadProgress(null);
-                // setImg(null);
+                toast.error(imgUploadError, toastStyle)
+                dispatch(updateFailure(error.message));
                 setImgFileUrl(null);
                 setImgUploading(false);
             },
@@ -89,16 +90,21 @@ export default function DashProfile() {
     };
 
     
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (Object.keys(formData).length === 0) {
             dispatch(updateFailure('No changes made'));
+            toast.warn('No changes made', toastStyle);
+            
+            // dispatch(updateFailure(null));
             return;
         }
         try {
             dispatch(updateStart());
             const res = await axios.put(`http://localhost:8000/user/update/${currentUser._id}`, formData, { withCredentials: true });
             // console.log(res.data);
+            toast.success('Succesfully Updated', toastStyle);
             dispatch(updateSuccess(res.data));
         } catch (error) {
             dispatch(updateFailure(error.message));
@@ -222,11 +228,13 @@ export default function DashProfile() {
                             </Grid>
                         </Box>
                     </Box>
-                    {error && (
+                    {/* {error && (
+                       
+                        
                         <Alert variant="filled" severity="error">
                             {error || imgUploadError}
                         </Alert>
-                    )}
+                    )} */}
                 </Container>
             </ThemeProvider>
         </Grid>

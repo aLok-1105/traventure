@@ -4,7 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -12,11 +11,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInFailure, signInStart, signInSuccess } from '../redux/user/userSlice';
-import { Alert, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import { ClassNames } from '@emotion/react';
+import { toast } from 'react-toastify';
+import { toastStyle } from '../components/toastStyle';
 
 export default function Signin() {
 
@@ -25,21 +26,28 @@ export default function Signin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
-    const {loading, error} = useSelector((state)=>state.user);
+    const {loading} = useSelector((state)=>state.user);
 
     const handleSubmit = async (e) => {
+      e.preventDefault();
       if(!email || !password){
+        toast.warn('Please fill all the fields', toastStyle)
         return dispatch(signInFailure('Please fill all the fields'));
       }
-      e.preventDefault();
       try {
           dispatch(signInStart());
           const res = await axios.post('/user/signin', {email, password }, {withCredentials: true });
           // console.log(res.data);
-          dispatch(signInSuccess(res.data));
-          navigate('/')
+          if(res.status === 200){
+            toast.success('Successfully Signin', toastStyle)
+            dispatch(signInSuccess(res.data));
+            navigate('/')
+          }
+          else{
+            toast.error('Invalid Credentials', toastStyle)
+          }
         } catch (error) {
-          console.log("error", error.message);
+          toast.error('Invalid Credentials', toastStyle)
           dispatch(signInFailure(error.message));
       }
     };
@@ -105,20 +113,22 @@ export default function Signin() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/signup" variant="body2">
+              <Typography variant="body2">
+                <NavLink to="/signup">
                   Don't have an account? Sign up
-                </Link>
+                </NavLink>
+                </Typography>
               </Grid>
             </Grid>
           </Box>
         </Box>
         {/* <Copyright sx={{ mt: 5 }} /> */}
       </Container>
-      {
+      {/* {
         error && (<Alert variant="filled" severity="error" >
         {error}
       </Alert>)
-      }
+      } */}
     </ThemeProvider>
     </div>
   )

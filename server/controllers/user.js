@@ -1,3 +1,4 @@
+const { error } = require('console');
 const User = require('../models/user');
 
 async function createUser(req, res) {
@@ -38,14 +39,17 @@ async function signinUser(req, res) {
 			email,
 			password
 		);
+		if(token === null ){
+			return res.status(401).json({error:'Invalid Crendentials'})
+		}
 		res.cookie('token', token, {
 			secure: true,
 		});
 		const { password: pass, ...rest } = validUser._doc;
-		//   console.log(rest);
-		res.status(201).json(rest);
+		
+		res.status(200).json(rest);
 	} catch (error) {
-		return res.status(422).json({ error: 'Invalid' });
+		return res.status(400).json({ error: 'Invalid' });
 	}
 }
 

@@ -4,7 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -12,35 +11,38 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-import { Alert, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import { ClassNames } from '@emotion/react';
-import { useDispatch, useSelector } from 'react-redux';
-import { signInFailure, signInStart, signInSuccess } from '../redux/user/userSlice';
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { toastStyle } from '../components/toastStyle';
 
 
 export default function Signup() {
-    const dispatch = useDispatch();
-    const {loading, error} = useSelector((state)=>state.user);
+    const {loading} = useSelector((state)=>state.user);
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    //'http://localhost:8000/user/signup'  
     const handleSubmit = async (e) => {
+      e.preventDefault();
         if(!fullName || !email || !password){
-          return dispatch(signInFailure('Please fill all the fields'));
+          return toast.warn('Please fill all the fields', toastStyle)
         }
-        e.preventDefault();
         try {
-            dispatch(signInStart());
-            const res = await axios.post('http://localhost:8000/user/signup', { fullName, email, password }, {withCredentials: true });
-            dispatch(signInSuccess(res));
+            const res = await axios.post('/user/signup', { fullName, email, password }, {withCredentials: true });
+            if(res.status === 201){
+              toast.success('Successfully Registered', toastStyle)
+              navigate('/')
+            }
+            else {
+              return toast.error(res.data, toastStyle);
+            }
             navigate('/signin')
           } catch (error) {
-            console.log(error);
-            dispatch(signInFailure(error.message));
+            return toast.error('Email Exists', toastStyle);
         }
       };
 
@@ -121,19 +123,21 @@ export default function Signup() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="signin" variant="body2">
-                  Already have an account? Sign in
+              <Typography variant="body2">
+                <Link to="/signin">
+                Already have an account? Sign in
                 </Link>
+                </Typography>
               </Grid>
             </Grid>
           </Box>
         </Box>
       </Container>
-      {
+      {/* {
         error && (<Alert variant="filled" severity="error" >
         {error}
       </Alert>)
-      }
+      } */}
       
     </ThemeProvider>
     </div>

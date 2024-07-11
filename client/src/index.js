@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store, persistor } from './redux/store.js';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { ToastContainer } from 'react-toastify';
 // import { ThemeProvider, createTheme } from '@mui/material/styles';
 // import CssBaseline from '@mui/material/CssBaseline';
 
@@ -20,6 +21,7 @@ root.render(
     <Provider store={store}>
     <BrowserRouter>
       <App />
+      <ToastContainer />
     </BrowserRouter>
     </Provider>
    </PersistGate>
