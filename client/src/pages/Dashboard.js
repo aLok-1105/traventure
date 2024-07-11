@@ -1,5 +1,5 @@
 import React from 'react'
-import DashProfile from './DashProfile';
+import DashProfile from '../components/DashProfile';
 
 export default function Dashboard() {
 

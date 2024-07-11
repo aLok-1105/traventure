@@ -1,105 +1,20 @@
-const {Router} = require('express');
-const Post = require('../models/post');
+const { Router } = require('express');
 const { validateToken1 } = require('../services/authentication');
+const {
+	createPost,
+	getPost,
+	updatePost,
+	deletePost,
+} = require('../controllers/post');
 
 const router = Router();
 
-router.post('/create', validateToken1, async (req, res)=>{
-    
-    const {title, location, budget, days, description, imageURL, groupSize} = req.body.formData;
-    if(!title || !location || !budget || !days || !description){
-        return res.status(422).json({ error: 'Fill Data' });
-    }
-    try {
-        await Post.create({
-            title,
-            location,
-            budget,
-            days,
-            description,
-            groupSize,
-            imageURL: imageURL == null ? 'https://images.pexels.com/photos/620337/pexels-photo-620337.jpeg?cs=srgb&dl=pexels-pripicart-620337.jpg&fm=jpg' : imageURL,
-            createdBy: req.user._id,
-        });
-        res.status(201).json({
-            message: 'Post Successfully Created',
-        });
-    } catch (error) {
-        res.status(422).send({ error: "Post Not Created" });
-        console.log(error);
-    }
+router.post('/create', validateToken1, createPost);
 
-})
+router.get('/getPost', getPost);
 
+router.put('/update/:id', updatePost);
 
-router.get('/getPost', async (req, res, next)=>{
-    try {
-        const startIdx = parseInt(req.query.startIdx) || 0;
-        const limit = parseInt(req.query.limit) || 9;
-        const sortDirection = req.query.order == 'asc' ? 1 : -1;
-        const posts = await Post.find({
-            // ...(req.query.createdBy && {createdBy: req.query.createdBy}),
-            ...(req.query.title && {title: req.query.title}),
-            ...(req.query.location && {location: req.query.location}),
-            ...(req.query.budget && {budget: req.query.budget}),
-            ...(req.query.days && {days: req.query.days}),
-            ...(req.query.description && {description: req.query.description}),
-            ...(req.query.createdBy && {description: req.query.createdBy}),
-            ...(req.query.searchTerm && {
-                $or: [
-                    {title: {$regex: req.query.searchTerm, $options: 'i'}},
-                    {location: {$regex: req.query.searchTerm, $options: 'i'}},
-                    {description: {$regex: req.query.searchTerm, $options: 'i'}},
-                ],
-            }),
-        }).populate("createdBy")
-        .sort({updatedAt: sortDirection})
-        .skip(startIdx)
-        .limit(limit);
+router.delete('/deletePost/:id', deletePost);
 
-        // console.log(posts[0].createdBy);
-
-        res.status(200).json(posts);
-
-    } catch (error) {
-        next(error)
-    }
-    
-})
-
-router.put('/update/:id',  async (req ,res)=>{
-    try {
-        const updatePost = await Post.findByIdAndUpdate(req.params.id, {
-            
-            $set:{
-                title: req.body.title,
-                location: req.body.location,
-                budget: req.body.budget,
-                days: req.body.days,
-                description: req.body.description,
-                groupSize: req.body.groupSize,
-                imageURL: req.body.imageURL,
-            },
-        
-        },
-            { new: true }
-        );
-        // console.log(updatePost);
-        res.status(200).json(updatePost);
-    } catch (error) {
-        res.status(404).json({ message: error.message})
-    }
-})
-
-router.delete('/deletePost/:id', async(req, res)=>{
-    // console.log(req.params.id);
-    try {
-        const deletedPost = await Post.deleteOne({_id : req.params.id});
-        console.log(deletedPost);
-        res.status(200).json(deletedPost);
-    } catch (error) {
-        res.status(400).json({message:error.message})
-    }
-})
-
-module.exports = router
+module.exports = router;

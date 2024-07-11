@@ -352,7 +352,7 @@ function Navbar({ mode, toggleColorMode }) {
                   </Typography>
                 </MenuItem>
                   </NavLink>
-                <NavLink to='/about' style={{ textDecoration: 'NONE'}}>
+                <NavLink to='/contact' style={{ textDecoration: 'NONE'}}>
                 <MenuItem
                   sx={{ py: '6px', px: '12px' }}
                 >

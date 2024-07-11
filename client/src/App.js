@@ -1,9 +1,5 @@
-import Home from '../src/components/Home'
 import Navbar from './components/Navbar';
-import Signin from './components/Signin';
 import {Routes, Route} from 'react-router-dom';
-import Signup from './components/Signup';
-import Dashboard from './components/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import CreatePost from './pages/CreatePost';
 import ShowPosts from './pages/ShowPosts';
@@ -15,6 +11,10 @@ import Footer from './components/Footer';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Home from './pages/Home';
+import Signup from './pages/Signup';
+import Signin from './pages/Signin';
+import Dashboard from './pages/Dashboard';
 
 
 function App() {
