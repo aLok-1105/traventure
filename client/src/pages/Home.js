@@ -200,7 +200,7 @@ export default function Home() {
           <MobileStepper
             steps={maxSteps}
             position="static"
-            activeStep={activeStep}
+            activeStep={activeStep ? activeStep : 0}
             sx={{backgroundColor:'rgb(255 255 255 / 0%) !important'}}
             nextButton={
               <Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>

@@ -13,6 +13,13 @@ import { ToastContainer } from 'react-toastify';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+if (process.env.NODE_ENV !== "development") {
+  console.log = function() {};
+  console.debug =function() {};
+  console.info = function() {};
+  console.warn = function() {};
+ console.error = function() {};
+}
 
 root.render(
   // <ThemeProvider theme={theme}>
