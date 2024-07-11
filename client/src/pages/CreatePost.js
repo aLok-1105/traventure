@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Container from '@mui/material/Container';
 // import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+// import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
