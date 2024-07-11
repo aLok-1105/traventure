@@ -102,7 +102,7 @@ export default function DashProfile() {
         }
         try {
             dispatch(updateStart());
-            const res = await axios.put(`http://localhost:8000/user/update/${currentUser._id}`, formData, { withCredentials: true });
+            const res = await axios.put(`/user/update/${currentUser._id}`, formData, { withCredentials: true });
             // console.log(res.data);
             toast.success('Succesfully Updated', toastStyle);
             dispatch(updateSuccess(res.data));

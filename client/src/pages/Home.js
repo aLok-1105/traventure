@@ -29,7 +29,7 @@ export default function Home() {
     const getPosts = async () => {
       try {
         const res = await axios.get(
-          'http://localhost:8000/post/getPost/?limit=5'
+          '/post/getPost/?limit=5'
         );
         // console.log(res.data);
         setAllPosts(res.data);

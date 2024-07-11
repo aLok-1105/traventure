@@ -85,7 +85,7 @@ export default function CreatePost() {
       }
       else{
         try {
-          const res = await axios.post('http://localhost:8000/post/create', {formData}, {withCredentials: true })
+          const res = await axios.post('/post/create', {formData}, {withCredentials: true })
           if(res.status === 201){
             toast.success('Post Successfully Created', toastStyle)
           }

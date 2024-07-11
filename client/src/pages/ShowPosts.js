@@ -132,7 +132,7 @@ export default function RecipeReviewCard() {
   const handleDeleteClick = async (id, postId)=>{
     if(id === currentUser._id){
       try {
-        await axios.delete(`http://localhost:8000/post/deletePost/${postId}`);
+        await axios.delete(`/post/deletePost/${postId}`);
         window.location.reload();
       } catch (error) {
         toast.warn('Unauthorized', toastStyle);
@@ -155,7 +155,7 @@ export default function RecipeReviewCard() {
     const getPosts = async () => {
       try {
         const res = await axios.get(
-          'http://localhost:8000/post/getPost'
+          '/post/getPost'
         );
         // console.log(res.data);
         setAllPosts(res.data);
@@ -176,7 +176,7 @@ export default function RecipeReviewCard() {
     const startIndex = allPosts.length;
     try {
       const res = await axios.get(
-        `http://localhost:8000/post/getPost?startIdx=${startIndex}`
+        `/post/getPost?startIdx=${startIndex}`
       );
       // console.log(res.data);
       setAllPosts((prev) => [...prev, ...res.data]);
