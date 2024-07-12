@@ -15,6 +15,7 @@ app.use(checkForAuthenticationAndCookie('token'));
 
 dotenv.config({ path: './config.env' });
 app.use(cors({
+    origin: 'https://traventure-iota.vercel.app/',
     credentials: true,  
   }));
 
