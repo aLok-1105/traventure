@@ -36,7 +36,7 @@ export default function Signin() {
       }
       try {
           dispatch(signInStart());
-          const res = await axios.post('/user/signin', {email, password }, {withCredentials: true });
+          const res = await axios.post('https://traventure-backend.vercel.app/user/signin', {email, password }, {withCredentials: true });
           // console.log(res.data);
           if(res.status === 200){
             toast.success('Successfully Signin', toastStyle)
