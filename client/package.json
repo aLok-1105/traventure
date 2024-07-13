@@ -1,9 +1,9 @@
 {
   "name": "client",
-  "homepage": "https://traventure-iota.vercel.app",
   "version": "0.1.0",
   "private": true,
   "proxy": "https://traventure-backend.vercel.app",
+  "homepage": ".",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",

@@ -14,19 +14,19 @@ app.use(cookieParser());
 app.use(checkForAuthenticationAndCookie('token'));
 
 dotenv.config({ path: './config.env' });
-// app.use(cors({
-//     origin: 'https://traventure-iota.vercel.app',
-//     credentials: true,  
-//   }));
-const corsOptions = {
+app.use(cors({
     origin: 'https://traventure-iota.vercel.app',
-    credentials: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type,Authorization'
-};
+    credentials: true,  
+  }));
+// const corsOptions = {
+//     origin: 'https://traventure-iota.vercel.app',
+//     credentials: true,
+//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//     allowedHeaders: 'Content-Type,Authorization'
+// };
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// app.use(cors(corsOptions));
+// app.options('*', cors(corsOptions));
 
 
 moongoose.connect(process.env.MONGO_URL, {
