@@ -29,7 +29,7 @@ export default function Home() {
     const getPosts = async () => {
       try {
         const res = await axios.get(
-          '/post/getPost/?limit=5'
+          'https://traventure-backend.vercel.app/post/getPost/?limit=5'
         );
         // console.log(res.data);
         setAllPosts(res.data);

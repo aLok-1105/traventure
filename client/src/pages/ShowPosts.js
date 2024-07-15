@@ -59,7 +59,7 @@ export default function RecipeReviewCard() {
 
       try {
         
-        await axios.put(`/post/update/${id}`, formData, {withCredentials: true });
+        await axios.put(`https://traventure-backend.vercel.app/post/update/${id}`, formData, {withCredentials: true });
         setClickedId(null);
 
       } catch (error) {

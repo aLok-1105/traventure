@@ -9,7 +9,7 @@ const app = express();
 
 const cors = require('cors');
 const corsOptions ={
-    origin:'https://traventure-backend.vercel.app/', 
+    origin:'https://traventure-backend.vercel.app', 
     credentials:true,         
 }
 app.use(cors(corsOptions));

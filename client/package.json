@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://traventure-backend.vercel.app/",
+  "proxy": "https://traventure-backend.vercel.app",
   "homepage": ".",
   "dependencies": {
     "@emotion/react": "^11.11.4",
