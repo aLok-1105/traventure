@@ -17,6 +17,7 @@ import {
   Container,
   Dialog,
   DialogContent,
+  DialogTitle,
   Grid,
   Input,
   TextField,
@@ -48,9 +49,11 @@ export default function RecipeReviewCard() {
   const [imgUploading, setImgUploading] = useState(false);
   const [imgUploadError, setImgUploadError] = useState(null);
   const [imgUploadProgress, setImgUploadProgress] = useState(null);
-
-
   const [clickedId, setClickedId] = useState(null);
+  const [clickedIdDel, setClickedIdDel] = useState(null);
+  const [deletePost, setDeletePost] = useState(false);
+
+
 
 
   const handleChange = (e)=>{
@@ -133,14 +136,19 @@ export default function RecipeReviewCard() {
 
   const handleClose = () => {
     setClickedId(null)
+    setClickedIdDel(null)
   };
 
   const handleDeleteClick = async (id, postId)=>{
+
     if(currentUser){
       if(id === currentUser._id){
         try {
-          await axios.delete(`${URL}/post/deletePost/${postId}`);
-          window.location.reload();
+          setClickedIdDel(postId);
+          if(deletePost){
+            await axios.delete(`${URL}/post/deletePost/${postId}`);
+            window.location.reload();
+          }
         } catch (error) {
           toast.warn('Unauthorized', toastStyle);
           setError(error.message);
@@ -308,11 +316,26 @@ export default function RecipeReviewCard() {
                     
                 </CardActions>
               </Card>
+              <Dialog 
+                open={clickedIdDel === post._id}
+                onClose={handleClose}
+              >
+                <DialogTitle>Do You want to delete the Post ?</DialogTitle>
+                <DialogContent>
+                  <Button onClick={()=>{setDeletePost(true); handleDeleteClick(post.createdBy._id, post._id); }}>
+                    Yes
+                  </Button >
+                  <Button onClick={handleClose}>
+                    No
+                  </Button>
+                  <p style={{fontSize:'10px', margin:'0px'}}><i>Click on yes twice</i></p>
+                </DialogContent>
+              </Dialog>
               <Dialog
                   open={clickedId===post._id}
                   onClose={handleClose}
                   >
-                  {/* <DialogTitle>{post.title}</DialogTitle> */}
+                  <DialogTitle>{post.title}</DialogTitle>
                   <DialogContent>
                   <Container component="main" maxWidth="sm">
         <Box
