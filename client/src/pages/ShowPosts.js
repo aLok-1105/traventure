@@ -192,7 +192,7 @@ export default function RecipeReviewCard() {
 
 
   return (
-    <>
+    <div>
       {loading ? (
         <Grid
           sx={{
@@ -474,6 +474,6 @@ export default function RecipeReviewCard() {
           } */}
         </Grid>
       )}
-    </>
+    </div>
   );
 }

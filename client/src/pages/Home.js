@@ -70,7 +70,7 @@ export default function Home() {
 
 
   return (
-    <>
+    <div>
         <Box >
         <Box sx={{height:'100vh'}}>
           <video 
@@ -218,7 +218,7 @@ export default function Home() {
             
           </Box>
         </Box>
-    </>
+    </div>
 
   )
 }

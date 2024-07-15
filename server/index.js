@@ -3,31 +3,23 @@ const dotenv = require('dotenv');
 const moongoose = require('mongoose');
 const userRoute = require('./routes/user')
 const postRoute = require('./routes/post')
-const cors = require('cors')
 const cookieParser = require('cookie-parser');
 const { checkForAuthenticationAndCookie } = require('./middlewares/authentication');
-
 const app = express();
+
+const cors = require('cors');
+const corsOptions ={
+    origin:'https://traventure-backend.vercel.app/', 
+    credentials:true,         
+}
+app.use(cors(corsOptions));
+
 app.use(express.urlencoded({extended: false}));
 app.use(express.json())
 app.use(cookieParser());
 app.use(checkForAuthenticationAndCookie('token'));
 
 dotenv.config({ path: './config.env' });
-app.use(cors({
-    origin: 'https://traventure-iota.vercel.app',
-    credentials: true,  
-  }));
-// const corsOptions = {
-//     origin: 'https://traventure-iota.vercel.app',
-//     credentials: true,
-//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//     allowedHeaders: 'Content-Type,Authorization'
-// };
-
-// app.use(cors(corsOptions));
-// app.options('*', cors(corsOptions));
-
 
 moongoose.connect(process.env.MONGO_URL, {
 }).then(()=>{
