@@ -15,6 +15,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import { useTheme } from '@mui/material/styles';
+import { URL } from '../api';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 // import Carousel from './Carosel';
@@ -29,7 +30,7 @@ export default function Home() {
     const getPosts = async () => {
       try {
         const res = await axios.get(
-          'https://traventure-backend.vercel.app/post/getPost/?limit=5'
+          `${URL}/post/getPost/?limit=9`
         );
         // console.log(res.data);
         setAllPosts(res.data);

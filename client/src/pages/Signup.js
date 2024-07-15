@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { toastStyle } from '../components/toastStyle';
+import { URL } from '../api';
 
 
 export default function Signup() {
@@ -32,7 +33,7 @@ export default function Signup() {
           return toast.warn('Please fill all the fields', toastStyle)
         }
         try {
-            const res = await axios.post('/user/signup', { fullName, email, password }, {withCredentials: true });
+            const res = await axios.post(`${URL}/user/signup`, { fullName, email, password }, {withCredentials: true });
             if(res.status === 201){
               toast.success('Successfully Registered', toastStyle)
               navigate('/')

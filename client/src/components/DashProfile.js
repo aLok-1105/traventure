@@ -21,6 +21,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {toastStyle} from './toastStyle';
+import { URL } from '../api';
 
 export default function DashProfile() {
 
@@ -102,7 +103,7 @@ export default function DashProfile() {
         }
         try {
             dispatch(updateStart());
-            const res = await axios.put(`/user/update/${currentUser._id}`, formData, { withCredentials: true });
+            const res = await axios.put(`${URL}/user/update/${currentUser._id}`, formData, { withCredentials: true });
             // console.log(res.data);
             toast.success('Succesfully Updated', toastStyle);
             dispatch(updateSuccess(res.data));

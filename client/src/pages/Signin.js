@@ -18,6 +18,7 @@ import { CircularProgress } from '@mui/material';
 import { ClassNames } from '@emotion/react';
 import { toast } from 'react-toastify';
 import { toastStyle } from '../components/toastStyle';
+import { URL } from '../api';
 
 export default function Signin() {
 
@@ -36,7 +37,7 @@ export default function Signin() {
       }
       try {
           dispatch(signInStart());
-          const res = await axios.post('https://traventure-backend.vercel.app/user/signin', {email, password }, {withCredentials: true });
+          const res = await axios.post(`${URL}/user/signin`, {email, password }, {withCredentials: true });
           // console.log(res.data);
           if(res.status === 200){
             toast.success('Successfully Signin', toastStyle)

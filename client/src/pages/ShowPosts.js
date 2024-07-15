@@ -33,6 +33,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../firebase';
 import { toastStyle } from '../components/toastStyle';
 import { toast } from 'react-toastify';
+import { URL } from '../api';
 
 export default function RecipeReviewCard() {
   const [allPosts, setAllPosts] = useState([]);
@@ -59,7 +60,7 @@ export default function RecipeReviewCard() {
 
       try {
         
-        await axios.put(`https://traventure-backend.vercel.app/post/update/${id}`, formData, {withCredentials: true });
+        await axios.put(`${URL}/post/update/${id}`, formData, {withCredentials: true });
         setClickedId(null);
 
       } catch (error) {
@@ -69,9 +70,14 @@ export default function RecipeReviewCard() {
   };
 
   const handleEditClick = (id, post_id)=>{
-    if(currentUser._id === id){
-      // console.log(post_id);
-      setClickedId(post_id);
+    if(currentUser){
+      if(currentUser._id != null && currentUser._id === id){
+        setClickedId(post_id);
+      }
+      else{
+        toast.warn('Unauthorized', toastStyle);
+        setError('Unauthorize');
+      }
     }
     else{
       toast.warn('Unauthorized', toastStyle);
@@ -130,13 +136,19 @@ export default function RecipeReviewCard() {
   };
 
   const handleDeleteClick = async (id, postId)=>{
-    if(id === currentUser._id){
-      try {
-        await axios.delete(`/post/deletePost/${postId}`);
-        window.location.reload();
-      } catch (error) {
+    if(currentUser){
+      if(id === currentUser._id){
+        try {
+          await axios.delete(`${URL}/post/deletePost/${postId}`);
+          window.location.reload();
+        } catch (error) {
+          toast.warn('Unauthorized', toastStyle);
+          setError(error.message);
+        }
+      }
+      else{
         toast.warn('Unauthorized', toastStyle);
-        setError(error.message);
+        setError('Unauthorize')
       }
     }
     else{
@@ -155,9 +167,9 @@ export default function RecipeReviewCard() {
     const getPosts = async () => {
       try {
         const res = await axios.get(
-          '/post/getPost'
+          `${URL}/post/getPost`
         );
-        // console.log(res.data);
+        // console.log(`${URL}`);
         setAllPosts(res.data);
         if (res.data.length < 9) {
           setShowMore(false);
@@ -176,7 +188,7 @@ export default function RecipeReviewCard() {
     const startIndex = allPosts.length;
     try {
       const res = await axios.get(
-        `/post/getPost?startIdx=${startIndex}`
+        `${URL}/post/getPost?startIdx=${startIndex}`
       );
       // console.log(res.data);
       setAllPosts((prev) => [...prev, ...res.data]);

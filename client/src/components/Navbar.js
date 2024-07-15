@@ -245,6 +245,7 @@ import axios from 'axios';
 import { signoutSuccess } from '../redux/user/userSlice';
 import { toast } from 'react-toastify';
 import { toastStyle } from './toastStyle';
+import { URL } from '../api';
 
 const logoStyle = {
   width: '57px',
@@ -260,7 +261,7 @@ function Navbar({ mode, toggleColorMode }) {
 
     const handleSignout = async () => {
     try {
-      await axios.post('/user/signout', {}, { withCredentials: true });
+      await axios.post(`${URL}/user/signout`, {}, { withCredentials: true });
       toast.success('Succesfully Signout', toastStyle)
       dispatch(signoutSuccess())
       navigate('/')

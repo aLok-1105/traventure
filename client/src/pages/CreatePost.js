@@ -11,6 +11,7 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { toastStyle } from '../components/toastStyle';
+import { URL } from '../api';
 
 export default function CreatePost() {
       
@@ -85,7 +86,7 @@ export default function CreatePost() {
       }
       else{
         try {
-          const res = await axios.post('/post/create', {formData}, {withCredentials: true })
+          const res = await axios.post(`${URL}/post/create`, {formData}, {withCredentials: true })
           if(res.status === 201){
             toast.success('Post Successfully Created', toastStyle)
           }
