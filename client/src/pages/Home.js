@@ -154,7 +154,7 @@ export default function Home() {
                     </>
                   }
                   title={post.title}
-                  subheader={moment(post.updatedAt).format('MMMM Do YYYY')}
+                  subheader={moment(post.createdAt).format('MMMM Do YYYY')}
                   // subheader={post.createdAt}
                 />
 
