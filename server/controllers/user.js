@@ -43,7 +43,9 @@ async function signinUser(req, res) {
 			return res.status(401).json({error:'Invalid Crendentials'})
 		}
 		res.cookie('token', token, {
-			secure: true,
+			httpOnly: true,
+			sameSite: 'None',
+			secure: true, //only for localhost
 		});
 		const { password: pass, ...rest } = validUser._doc;
 		

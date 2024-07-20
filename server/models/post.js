@@ -33,10 +33,14 @@ const postSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
     },
+    likes:[ {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+    }],
     isPublic :{
         type: Boolean,
         default: true
-    }
+    },
 },{ timestamps: true })
 
 

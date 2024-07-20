@@ -9,6 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import axios from 'axios';
 import {
   Alert,
@@ -53,16 +54,39 @@ export default function RecipeReviewCard() {
   const [clickedIdDel, setClickedIdDel] = useState(null);
   const [deletePost, setDeletePost] = useState(false);
 
+  const handleLikeClick = async (id) =>{
+    try {
+      const res = await axios.put(`${URL}/post/likePost`, {_id: id}, {withCredentials: true });
+      const updatedPost = res.data;
+    setAllPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post._id === id ? { ...post, likes: updatedPost.likes } : post
+      )
+    );
+    } catch (error) {
+      toast.warn('Unauthorized', toastStyle);
+    }
+  }
+  const handleUnlikeClick = async (id) =>{
+    try {
+      const res = await axios.put(`${URL}/post/unlikePost`, {_id: id}, {withCredentials: true });
+      const updatedPost = res.data;
 
-
+    setAllPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post._id === id ? { ...post, likes: updatedPost.likes } : post
+      )
+    );
+    } catch (error) {
+      toast.warn('Unauthorized', toastStyle);
+    }
+  }
 
   const handleChange = (e)=>{
     setFormData({...formData, [e.target.name]: e.target.value});
   }
   const handleSubmit = async (id) => {
-
       try {
-        
         await axios.put(`${URL}/post/update/${id}`, formData, {withCredentials: true });
         setClickedId(null);
 
@@ -290,9 +314,36 @@ export default function RecipeReviewCard() {
                   alt={post.imageURL}
                 />
                 <CardActions disableSpacing sx={{display: 'flex', justifyContent:'space-between'}}>
-                  <IconButton aria-label='add to favorites'>
-                    <FavoriteIcon />
+                {
+                  currentUser ? 
+                  post.likes.includes(currentUser._id) ?
+                  (
+                    <IconButton aria-label='add to favorites' onClick = {()=>handleUnlikeClick(post._id)}>
+                    <FavoriteIcon/>
                   </IconButton>
+                  )
+                  :
+                  (
+                    <IconButton aria-label='add to favorites' onClick = {()=>handleLikeClick(post._id)}>
+                    <FavoriteBorderIcon />
+                    </IconButton>
+                  )
+                  :
+                  (
+                    <IconButton aria-label='add to favorites' onClick = {()=>handleLikeClick(post._id)}>
+                    <FavoriteBorderIcon />
+                    
+                  </IconButton>
+                   
+                  )
+                }
+                  <span>
+                    { post.likes ?
+                      post.likes.length
+                      :
+                      0
+                      }
+                  </span>
                   <IconButton
                     aria-label='share'
                     display='flex'>

@@ -40,6 +40,7 @@ async function getPost(req, res, next) {
 			...(req.query.location && { location: req.query.location }),
 			...(req.query.budget && { budget: req.query.budget }),
 			...(req.query.days && { days: req.query.days }),
+			...(req.query.likes && { days: req.query.likes }),
 			...(req.query.description && {
 				description: req.query.description,
 			}),
@@ -68,7 +69,7 @@ async function getPost(req, res, next) {
 			}),
 		})
 			.populate('createdBy')
-			.sort({ updatedAt: sortDirection })
+			.sort({ likes: sortDirection })
 			.skip(startIdx)
 			.limit(limit);
 
@@ -115,4 +116,38 @@ async function deletePost(req, res) {
 	}
 }
 
-module.exports = { createPost, getPost, updatePost, deletePost };
+async function likePost(req, res){
+	try {
+		const updatePost = await Post.findByIdAndUpdate(
+			req.body._id,
+			{
+				$push: {
+					likes: req.user._id,
+				}
+			},
+			{ new: true }
+		)
+		res.status(200).json(updatePost);	
+	} catch (error) {
+		res.status(404).json({ message: error.message });
+	}
+}
+
+async function unlikePost(req, res){
+	try {
+		const updatePost = await Post.findByIdAndUpdate(
+			req.body._id,
+			{
+				$pull: {
+					likes: req.user._id,
+				}
+			},
+			{ new: true }
+		)
+		res.status(200).json(updatePost);	
+	} catch (error) {
+		res.status(404).json({ message: error.message });
+	}
+}
+
+module.exports = { createPost, getPost, updatePost, deletePost, likePost, unlikePost };
