@@ -9,7 +9,7 @@ const app = express();
 
 const cors = require('cors');
 const corsOptions ={
-    origin:'https://traventure-iota.vercel.app/', 
+    origin:'https://traventure-iota.vercel.app', 
     // origin:'http://localhost:3000', 
     credentials:true,         
 }
