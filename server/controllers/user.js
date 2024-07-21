@@ -42,7 +42,7 @@ async function signinUser(req, res) {
 		if(token === null ){
 			return res.status(401).json({error:'Invalid Crendentials'})
 		}
-		res.cookie('token', 'your-auth-token', {
+		res.cookie('token', token, {
 			path: '/', // Path where the cookie is available
 			domain: 'https://traventure-iota.vercel.app', // Domain where the cookie is available
 			httpOnly: true, // Ensure the cookie is HTTP only
