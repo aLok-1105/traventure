@@ -42,12 +42,19 @@ async function signinUser(req, res) {
 		if(token === null ){
 			return res.status(401).json({error:'Invalid Crendentials'})
 		}
-		res.cookie('token', token, {
-			// httpOnly: true,
-			// expires: 7 * 24 * 60 * 60 * 1000,
-			sameSite: 'None',
-			secure: true, //only for localhost
+		res.cookie('token', 'your-auth-token', {
+			path: '/', // Path where the cookie is available
+			domain: 'https://traventure-iota.vercel.app', // Domain where the cookie is available
+			httpOnly: true, // Ensure the cookie is HTTP only
+			secure: true, // Ensure the cookie is secure if using HTTPS
+			sameSite: 'None', // Adjust as necessary
 		});
+		// res.cookie('token', token, {
+		// 	// httpOnly: true,
+		// 	// expires: 7 * 24 * 60 * 60 * 1000,
+		// 	sameSite: 'None',
+		// 	secure: true, //only for localhost
+		// });
 		const { password: pass, ...rest } = validUser._doc;
 		
 		res.status(200).json(rest);
@@ -60,7 +67,7 @@ function signoutUser(req, res, next) {
 	try {
 		res.clearCookie('token', {
             path: '/', // Ensure this matches the path where the cookie was set
-            domain: 'https://traventure-iota.vercel.app/', // Specify your domain here
+            domain: 'https://traventure-iota.vercel.app', // Specify your domain here
             httpOnly: true, // Same as when the cookie was set
             secure: true, // Same as when the cookie was set
             sameSite: 'None', // Adjust as necessary
