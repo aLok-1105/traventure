@@ -21,6 +21,7 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     const token = Cookies.get('token');
+    // console.log(token);
     if (!token || tokenIsInvalid(token)) {
       dispatch(signoutSuccess());
     }
