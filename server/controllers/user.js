@@ -58,7 +58,13 @@ async function signinUser(req, res) {
 
 function signoutUser(req, res, next) {
 	try {
-		res.clearCookie('token');
+		res.clearCookie('token', {
+            path: '/', // Ensure this matches the path where the cookie was set
+            domain: 'https://traventure-iota.vercel.app/', // Specify your domain here
+            httpOnly: true, // Same as when the cookie was set
+            secure: true, // Same as when the cookie was set
+            sameSite: 'None', // Adjust as necessary
+        });
 		res.status(200).json({ message: 'Signout successful' });
 	} catch (error) {
 		next(error);
